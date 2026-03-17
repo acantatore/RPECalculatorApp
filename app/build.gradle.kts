@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
@@ -22,10 +24,15 @@ android {
 
     signingConfigs {
         create("release") {
+            val props = Properties()
+            val propFile = file("../local.properties")
+            if (propFile.exists()) {
+                props.load(propFile.inputStream())
+            }
             storeFile = file("release.jks")
-            storePassword = "rperelease2026"
+            storePassword = props.getProperty("RELEASE_STORE_PASSWORD") ?: ""
             keyAlias = "rpecalc_key"
-            keyPassword = "rperelease2026"
+            keyPassword = props.getProperty("RELEASE_KEY_PASSWORD") ?: ""
         }
     }
 
