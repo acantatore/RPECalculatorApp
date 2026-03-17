@@ -23,28 +23,69 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import com.acantatore.rpecalc.data.UserPreferences
+import com.acantatore.rpecalc.data.UserPreferencesData
 import com.acantatore.rpecalc.ui.MainScreen
+import com.acantatore.rpecalc.ui.SettingsScreen
 import com.acantatore.rpecalc.ui.theme.Palettes
 import com.acantatore.rpecalc.ui.theme.RPECalcTheme
-import androidx.compose.runtime.*
+import com.acantatore.rpecalc.utils.UnitSystem
+import com.acantatore.rpecalc.utils.WarmupProtocol
+import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        val userPreferences = UserPreferences(this)
+
         setContent {
             var currentPalette by remember { mutableStateOf(Palettes[0]) }
+            var showSettings by remember { mutableStateOf(false) }
+
+            // Collect preferences from DataStore
+            val preferences by userPreferences.preferencesFlow.collectAsState(
+                initial = UserPreferencesData()
+            )
+
+            val coroutineScope = rememberCoroutineScope()
 
             RPECalcTheme(palette = currentPalette) {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    MainScreen(
-                        currentPalette = currentPalette,
-                        onPaletteChange = { currentPalette = it }
-                    )
+                    if (showSettings) {
+                        SettingsScreen(
+                            currentPalette = currentPalette,
+                            preferences = preferences,
+                            onUnitChange = { unit ->
+                                coroutineScope.launch {
+                                    userPreferences.setUnitSystem(unit)
+                                }
+                            },
+                            onBarWeightChange = { weight ->
+                                coroutineScope.launch {
+                                    userPreferences.setBarWeight(weight)
+                                }
+                            },
+                            onProtocolChange = { protocol ->
+                                coroutineScope.launch {
+                                    userPreferences.setWarmupProtocol(protocol)
+                                }
+                            },
+                            onBack = { showSettings = false }
+                        )
+                    } else {
+                        MainScreen(
+                            currentPalette = currentPalette,
+                            preferences = preferences,
+                            onPaletteChange = { currentPalette = it },
+                            onNavigateToSettings = { showSettings = true }
+                        )
+                    }
                 }
             }
         }

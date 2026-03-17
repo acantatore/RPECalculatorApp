@@ -19,7 +19,6 @@ package com.acantatore.rpecalc.ui
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -34,64 +33,96 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.filled.Settings
+import com.acantatore.rpecalc.data.UserPreferencesData
 import com.acantatore.rpecalc.ui.theme.*
 import com.acantatore.rpecalc.utils.Calculator
+import com.acantatore.rpecalc.utils.WarmupSet
 import java.util.Locale
 
 @Composable
 fun MainScreen(
     currentPalette: AppPalette,
-    onPaletteChange: (AppPalette) -> Unit
+    preferences: UserPreferencesData,
+    onPaletteChange: (AppPalette) -> Unit,
+    onNavigateToSettings: () -> Unit
 ) {
     var haveWeightInput by remember { mutableStateOf("") }
     var haveRepsInput by remember { mutableStateOf("") }
     var haveRpeInput by remember { mutableStateOf("") }
 
-    var e1rmResult by remember { mutableStateOf<String?>(null) }
+    var e1rmResult by remember { mutableStateOf<Double?>(null) }
+    var e1rmDisplay by remember { mutableStateOf<String?>(null) }
 
     var wantRepsInput by remember { mutableStateOf("") }
     var wantRpeInput by remember { mutableStateOf("") }
-    var targetWeightResult by remember { mutableStateOf<String?>(null) }
-    
+    var targetWeightResult by remember { mutableStateOf<Double?>(null) }
+    var targetWeightDisplay by remember { mutableStateOf<String?>(null) }
+
+    var warmupSets by remember { mutableStateOf<List<WarmupSet>>(emptyList()) }
+
     var showAboutDialog by remember { mutableStateOf(false) }
     var showPaletteMenu by remember { mutableStateOf(false) }
 
-    // Automatic re-calc like JavaScript `oninput="calc()"`
-    LaunchedEffect(haveWeightInput, haveRepsInput, haveRpeInput, wantRepsInput, wantRpeInput) {
+    // Automatic re-calc when inputs or preferences change
+    LaunchedEffect(
+        haveWeightInput, haveRepsInput, haveRpeInput,
+        wantRepsInput, wantRpeInput,
+        preferences.unitSystem, preferences.barWeight, preferences.warmupProtocol
+    ) {
         val w = haveWeightInput.toDoubleOrNull()
         val r = haveRepsInput.toIntOrNull()
         val rpe = haveRpeInput.toDoubleOrNull()
-        
+
         if (w != null && w > 0 && r != null && r > 0 && rpe != null && rpe > 0) {
             val e1rm = Calculator.calculateE1RM(w, r, rpe)
             if (e1rm > 0) {
-                e1rmResult = String.format(Locale.getDefault(), "%.1f", e1rm)
-                
+                e1rmResult = e1rm
+                e1rmDisplay = String.format(Locale.getDefault(), "%.1f", e1rm)
+
                 val wr = wantRepsInput.toIntOrNull()
                 val wrpe = wantRpeInput.toDoubleOrNull()
-                if (wr != null && wr >= 0 && wrpe != null && wrpe > 0) {
+                if (wr != null && wr > 0 && wrpe != null && wrpe > 0) {
                     val tw = Calculator.calculateTargetWeight(e1rm, wr, wrpe)
                     if (tw > 0) {
-                        targetWeightResult = String.format(Locale.getDefault(), "%.1f", tw)
+                        targetWeightResult = tw
+                        targetWeightDisplay = String.format(Locale.getDefault(), "%.1f", tw)
+
+                        // Generate warmup sets
+                        warmupSets = Calculator.generateWarmupSets(
+                            workingWeight = tw,
+                            barWeight = preferences.barWeight,
+                            protocol = preferences.warmupProtocol,
+                            unit = preferences.unitSystem
+                        )
                     } else {
                         targetWeightResult = null
+                        targetWeightDisplay = null
+                        warmupSets = emptyList()
                     }
                 } else {
                     targetWeightResult = null
+                    targetWeightDisplay = null
+                    warmupSets = emptyList()
                 }
             } else {
                 e1rmResult = null
+                e1rmDisplay = null
                 targetWeightResult = null
+                targetWeightDisplay = null
+                warmupSets = emptyList()
             }
         } else {
             e1rmResult = null
+            e1rmDisplay = null
             targetWeightResult = null
+            targetWeightDisplay = null
+            warmupSets = emptyList()
         }
     }
 
@@ -101,7 +132,7 @@ fun MainScreen(
             .verticalScroll(rememberScrollState())
             .background(BackgroundColor)
     ) {
-        // App Bar equivalent
+        // App Bar
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -115,8 +146,18 @@ fun MainScreen(
                 style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
                 color = currentPalette.accent
             )
-            
+
             Row {
+                // Settings icon
+                IconButton(onClick = onNavigateToSettings) {
+                    Icon(
+                        imageVector = Icons.Default.Settings,
+                        contentDescription = "Settings",
+                        tint = currentPalette.accent
+                    )
+                }
+
+                // Theme picker
                 Box {
                     IconButton(onClick = { showPaletteMenu = true }) {
                         Icon(
@@ -125,7 +166,7 @@ fun MainScreen(
                             tint = currentPalette.accent
                         )
                     }
-                    
+
                     DropdownMenu(
                         expanded = showPaletteMenu,
                         onDismissRequest = { showPaletteMenu = false },
@@ -143,6 +184,7 @@ fun MainScreen(
                     }
                 }
 
+                // About
                 IconButton(onClick = { showAboutDialog = true }) {
                     Icon(
                         imageVector = Icons.Default.Info,
@@ -153,7 +195,22 @@ fun MainScreen(
             }
         }
 
-        // The Gradient Background Area for Cards
+        // Unit indicator
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(CardBackground)
+                .padding(horizontal = 16.dp, vertical = 4.dp),
+            horizontalArrangement = Arrangement.End
+        ) {
+            Text(
+                text = "Unit: ${preferences.unitSystem.label} | Bar: ${preferences.barWeight.toInt()} kg",
+                fontSize = 12.sp,
+                color = TextSecondary
+            )
+        }
+
+        // Gradient background area for cards
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -181,7 +238,7 @@ fun MainScreen(
 
                         Divider(modifier = Modifier.padding(vertical = 16.dp), color = BorderColor)
 
-                        ResultRow("E1RM", e1rmResult ?: "")
+                        ResultRow("E1RM", e1rmDisplay ?: "")
                     }
                 )
 
@@ -198,12 +255,24 @@ fun MainScreen(
 
                         Divider(modifier = Modifier.padding(vertical = 16.dp), color = BorderColor)
 
-                        ResultRow("Weight", targetWeightResult ?: "")
+                        ResultRow("Weight", targetWeightDisplay ?: "")
                     }
                 )
+
+                // WARMUP CARD - shows when target weight is calculated
+                AnimatedVisibility(visible = warmupSets.isNotEmpty()) {
+                    Column {
+                        Spacer(modifier = Modifier.height(26.dp))
+                        WarmupCard(
+                            warmupSets = warmupSets,
+                            unit = preferences.unitSystem,
+                            currentPalette = currentPalette
+                        )
+                    }
+                }
             }
         }
-        
+
         Spacer(modifier = Modifier.height(32.dp))
     }
 
@@ -267,7 +336,7 @@ fun InputCard(
                     fontSize = 18.sp
                 )
             }
-            
+
             Column(
                 modifier = Modifier.padding(horizontal = 40.dp, vertical = 20.dp)
             ) {
@@ -295,10 +364,10 @@ fun RpeInputField(
             color = TextPrimary,
             modifier = Modifier.padding(end = 16.dp)
         )
-        
+
         OutlinedTextField(
             value = value,
-            onValueChange = { 
+            onValueChange = {
                 if (it.isEmpty() || it.matches(Regex("^\\d*\\.?\\d*$"))) {
                     onValueChange(it)
                 }
@@ -332,7 +401,7 @@ fun ResultRow(label: String, result: String) {
             fontSize = 18.sp,
             color = TextPrimary
         )
-        
+
         Box(
             modifier = Modifier.width(110.dp),
             contentAlignment = Alignment.Center

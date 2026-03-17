@@ -18,6 +18,7 @@
 package com.acantatore.rpecalc.utils
 
 import kotlin.math.roundToInt
+import kotlin.math.roundToLong
 
 object Calculator {
 
@@ -99,9 +100,69 @@ object Calculator {
     }
     
     /**
-     * Helper to round to nearest 2.5 (standard plate math).
+     * Helper to round to nearest plate increment.
+     * @param weight The weight to round
+     * @param increment The plate increment (e.g., 2.5 for lbs, 0.5 for kg)
      */
-    fun roundToNearestPlate(weight: Double): Double {
-        return Math.round(weight / 2.5) * 2.5
+    fun roundToNearestPlate(weight: Double, increment: Double = 2.5): Double {
+        return (weight / increment).roundToLong() * increment
+    }
+
+    /**
+     * Generates warmup sets leading up to the working weight.
+     *
+     * @param workingWeight The target working weight
+     * @param barWeight Weight of the bar
+     * @param protocol The warmup protocol to use
+     * @param unit The unit system (kg or lbs)
+     * @return List of warmup sets, or empty if working weight <= bar weight
+     */
+    fun generateWarmupSets(
+        workingWeight: Double,
+        barWeight: Double,
+        protocol: WarmupProtocol,
+        unit: UnitSystem
+    ): List<WarmupSet> {
+        if (workingWeight <= barWeight) {
+            return emptyList()
+        }
+
+        val sets = mutableListOf<WarmupSet>()
+        var previousWeight = 0.0
+
+        for (step in protocol.steps) {
+            val targetWeight = if (step.percentage == 0) {
+                barWeight
+            } else {
+                barWeight + (workingWeight - barWeight) * (step.percentage / 100.0)
+            }
+
+            // Round to achievable weight with available plates
+            val (plates, actualWeight) = PlateCalculator.breakdown(targetWeight, barWeight, unit)
+
+            // Skip if this weight is the same as previous (avoids duplicate sets)
+            if (actualWeight == previousWeight && sets.isNotEmpty()) {
+                continue
+            }
+
+            val isBarOnly = step.percentage == 0 || actualWeight == barWeight
+            val wasRounded = actualWeight != targetWeight
+
+            sets.add(
+                WarmupSet(
+                    weight = targetWeight,
+                    reps = step.reps,
+                    percentage = step.percentage,
+                    plates = plates,
+                    isBarOnly = isBarOnly,
+                    actualWeight = actualWeight,
+                    wasRounded = wasRounded
+                )
+            )
+
+            previousWeight = actualWeight
+        }
+
+        return sets
     }
 }
