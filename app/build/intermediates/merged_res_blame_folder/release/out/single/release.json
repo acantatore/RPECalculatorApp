@@ -1,0 +1,10 @@
+[
+    {
+        "merged": "com.rpecalc.app-merged_res-40:/xml_data_extraction_rules.xml.flat",
+        "source": "com.rpecalc.app-main-41:/xml/data_extraction_rules.xml"
+    },
+    {
+        "merged": "com.rpecalc.app-merged_res-40:/xml_backup_rules.xml.flat",
+        "source": "com.rpecalc.app-main-41:/xml/backup_rules.xml"
+    }
+]

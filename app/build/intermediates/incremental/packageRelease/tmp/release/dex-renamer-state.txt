@@ -1,0 +1,7 @@
+#Mon Mar 16 15:28:01 GMT-03:00 2026
+base.0=/Users/naranjax/RPECalc/app/build/intermediates/dex/release/mergeDexRelease/classes.dex
+base.1=/Users/naranjax/RPECalc/app/build/intermediates/dex/release/mergeDexRelease/classes2.dex
+path.0=classes.dex
+path.1=classes2.dex
+renamed.0=classes.dex
+renamed.1=classes2.dex
