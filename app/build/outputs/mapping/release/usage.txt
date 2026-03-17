@@ -14275,6 +14275,7 @@ androidx.versionedparcelable.VersionedParcelStream
 androidx.versionedparcelable.VersionedParcelize
 com.acantatore.rpecalc.MainActivity:
     public static final int $stable
+com.acantatore.rpecalc.R$mipmap
 com.acantatore.rpecalc.R$string
 com.acantatore.rpecalc.R$style
 com.acantatore.rpecalc.R$xml

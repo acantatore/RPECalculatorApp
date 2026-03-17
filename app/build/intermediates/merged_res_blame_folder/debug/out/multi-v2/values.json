@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "com.rpecalc.app-mergeDebugResources-42:/values/values.xml",
+            "outputFile": "com.acantatore.rpecalc.app-mergeDebugResources-42:/values/values.xml",
             "map": [
                 {
                     "source": "/Users/naranjax/.gradle/caches/8.14.3/transforms/c8cde84811caf1a5c4988636ddd89eb8/transformed/startup-runtime-1.1.1/res/values/values.xml",

@@ -1,4 +1,4 @@
-com.rpecalc
+com.acantatore.rpecalc
 attr alpha
 attr font
 attr fontProviderAuthority

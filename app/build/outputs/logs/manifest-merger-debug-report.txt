@@ -1,9 +1,9 @@
 -- Merging decision tree log ---
 manifest
-ADDED from /Users/naranjax/PLRPE/RPECalculatorApp/app/src/main/AndroidManifest.xml:2:1-25:12
-INJECTED from /Users/naranjax/PLRPE/RPECalculatorApp/app/src/main/AndroidManifest.xml:2:1-25:12
-INJECTED from /Users/naranjax/PLRPE/RPECalculatorApp/app/src/main/AndroidManifest.xml:2:1-25:12
-INJECTED from /Users/naranjax/PLRPE/RPECalculatorApp/app/src/main/AndroidManifest.xml:2:1-25:12
+ADDED from /Users/naranjax/PLRPE/RPECalculatorApp/app/src/main/AndroidManifest.xml:2:1-26:12
+INJECTED from /Users/naranjax/PLRPE/RPECalculatorApp/app/src/main/AndroidManifest.xml:2:1-26:12
+INJECTED from /Users/naranjax/PLRPE/RPECalculatorApp/app/src/main/AndroidManifest.xml:2:1-26:12
+INJECTED from /Users/naranjax/PLRPE/RPECalculatorApp/app/src/main/AndroidManifest.xml:2:1-26:12
 MERGED from [androidx.compose.material3:material3:1.1.2] /Users/naranjax/.gradle/caches/8.14.3/transforms/d68d124011eb5aa9367318aefeddebd7/transformed/material3-1.1.2/AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.compose.material:material-ripple-android:1.5.4] /Users/naranjax/.gradle/caches/8.14.3/transforms/d844bd8a8d87fd1afa91faefb3da086a/transformed/material-ripple-release/AndroidManifest.xml:2:1-7:12
 MERGED from [androidx.compose.material:material-icons-core-android:1.5.4] /Users/naranjax/.gradle/caches/8.14.3/transforms/80ccb9ce3361ae1599ade608e1d0ee23/transformed/material-icons-core-release/AndroidManifest.xml:2:1-7:12
@@ -49,6 +49,7 @@ MERGED from [androidx.profileinstaller:profileinstaller:1.3.0] /Users/naranjax/.
 MERGED from [androidx.startup:startup-runtime:1.1.1] /Users/naranjax/.gradle/caches/8.14.3/transforms/c8cde84811caf1a5c4988636ddd89eb8/transformed/startup-runtime-1.1.1/AndroidManifest.xml:17:1-33:12
 MERGED from [androidx.tracing:tracing:1.0.0] /Users/naranjax/.gradle/caches/8.14.3/transforms/2b40e48f50e82c3291f2ae5081d80b7e/transformed/tracing-1.0.0/AndroidManifest.xml:17:1-24:12
 	package
+		ADDED from /Users/naranjax/PLRPE/RPECalculatorApp/app/src/main/AndroidManifest.xml:4:5-37
 		INJECTED from /Users/naranjax/PLRPE/RPECalculatorApp/app/src/main/AndroidManifest.xml
 	android:versionName
 		INJECTED from /Users/naranjax/PLRPE/RPECalculatorApp/app/src/main/AndroidManifest.xml
@@ -59,8 +60,8 @@ MERGED from [androidx.tracing:tracing:1.0.0] /Users/naranjax/.gradle/caches/8.14
 	xmlns:android
 		ADDED from /Users/naranjax/PLRPE/RPECalculatorApp/app/src/main/AndroidManifest.xml:2:11-69
 application
-ADDED from /Users/naranjax/PLRPE/RPECalculatorApp/app/src/main/AndroidManifest.xml:5:5-23:19
-INJECTED from /Users/naranjax/PLRPE/RPECalculatorApp/app/src/main/AndroidManifest.xml:5:5-23:19
+ADDED from /Users/naranjax/PLRPE/RPECalculatorApp/app/src/main/AndroidManifest.xml:6:5-24:19
+INJECTED from /Users/naranjax/PLRPE/RPECalculatorApp/app/src/main/AndroidManifest.xml:6:5-24:19
 MERGED from [androidx.compose.ui:ui-test-manifest:1.5.4] /Users/naranjax/.gradle/caches/8.14.3/transforms/de3b9b2a049f0547a67a4bf64ecf16d9/transformed/ui-test-manifest-1.5.4/AndroidManifest.xml:22:5-26:19
 MERGED from [androidx.compose.ui:ui-test-manifest:1.5.4] /Users/naranjax/.gradle/caches/8.14.3/transforms/de3b9b2a049f0547a67a4bf64ecf16d9/transformed/ui-test-manifest-1.5.4/AndroidManifest.xml:22:5-26:19
 MERGED from [androidx.compose.ui:ui-tooling-android:1.5.4] /Users/naranjax/.gradle/caches/8.14.3/transforms/5b1b301cda92469eec592a4c7b1a698c/transformed/ui-tooling-release/AndroidManifest.xml:22:5-26:19
@@ -82,39 +83,39 @@ MERGED from [androidx.startup:startup-runtime:1.1.1] /Users/naranjax/.gradle/cac
 	android:appComponentFactory
 		ADDED from [androidx.core:core:1.12.0] /Users/naranjax/.gradle/caches/8.14.3/transforms/0b23180cc7701e753a38635d977fba8a/transformed/core-1.12.0/AndroidManifest.xml:28:18-86
 	android:supportsRtl
-		ADDED from /Users/naranjax/PLRPE/RPECalculatorApp/app/src/main/AndroidManifest.xml:10:9-35
+		ADDED from /Users/naranjax/PLRPE/RPECalculatorApp/app/src/main/AndroidManifest.xml:11:9-35
 	android:label
-		ADDED from /Users/naranjax/PLRPE/RPECalculatorApp/app/src/main/AndroidManifest.xml:9:9-41
+		ADDED from /Users/naranjax/PLRPE/RPECalculatorApp/app/src/main/AndroidManifest.xml:10:9-41
 	android:fullBackupContent
-		ADDED from /Users/naranjax/PLRPE/RPECalculatorApp/app/src/main/AndroidManifest.xml:8:9-54
+		ADDED from /Users/naranjax/PLRPE/RPECalculatorApp/app/src/main/AndroidManifest.xml:9:9-54
 	tools:targetApi
-		ADDED from /Users/naranjax/PLRPE/RPECalculatorApp/app/src/main/AndroidManifest.xml:12:9-29
+		ADDED from /Users/naranjax/PLRPE/RPECalculatorApp/app/src/main/AndroidManifest.xml:13:9-29
 	android:allowBackup
-		ADDED from /Users/naranjax/PLRPE/RPECalculatorApp/app/src/main/AndroidManifest.xml:6:9-35
+		ADDED from /Users/naranjax/PLRPE/RPECalculatorApp/app/src/main/AndroidManifest.xml:7:9-35
 	android:theme
-		ADDED from /Users/naranjax/PLRPE/RPECalculatorApp/app/src/main/AndroidManifest.xml:11:9-45
+		ADDED from /Users/naranjax/PLRPE/RPECalculatorApp/app/src/main/AndroidManifest.xml:12:9-45
 	android:dataExtractionRules
-		ADDED from /Users/naranjax/PLRPE/RPECalculatorApp/app/src/main/AndroidManifest.xml:7:9-65
-activity#com.rpecalc.MainActivity
-ADDED from /Users/naranjax/PLRPE/RPECalculatorApp/app/src/main/AndroidManifest.xml:13:9-22:20
+		ADDED from /Users/naranjax/PLRPE/RPECalculatorApp/app/src/main/AndroidManifest.xml:8:9-65
+activity#com.acantatore.rpecalc.MainActivity
+ADDED from /Users/naranjax/PLRPE/RPECalculatorApp/app/src/main/AndroidManifest.xml:14:9-23:20
 	android:label
-		ADDED from /Users/naranjax/PLRPE/RPECalculatorApp/app/src/main/AndroidManifest.xml:16:13-45
+		ADDED from /Users/naranjax/PLRPE/RPECalculatorApp/app/src/main/AndroidManifest.xml:17:13-45
 	android:exported
-		ADDED from /Users/naranjax/PLRPE/RPECalculatorApp/app/src/main/AndroidManifest.xml:15:13-36
+		ADDED from /Users/naranjax/PLRPE/RPECalculatorApp/app/src/main/AndroidManifest.xml:16:13-36
 	android:theme
-		ADDED from /Users/naranjax/PLRPE/RPECalculatorApp/app/src/main/AndroidManifest.xml:17:13-49
+		ADDED from /Users/naranjax/PLRPE/RPECalculatorApp/app/src/main/AndroidManifest.xml:18:13-49
 	android:name
-		ADDED from /Users/naranjax/PLRPE/RPECalculatorApp/app/src/main/AndroidManifest.xml:14:13-41
+		ADDED from /Users/naranjax/PLRPE/RPECalculatorApp/app/src/main/AndroidManifest.xml:15:13-41
 intent-filter#action:name:android.intent.action.MAIN+category:name:android.intent.category.LAUNCHER
-ADDED from /Users/naranjax/PLRPE/RPECalculatorApp/app/src/main/AndroidManifest.xml:18:13-21:29
+ADDED from /Users/naranjax/PLRPE/RPECalculatorApp/app/src/main/AndroidManifest.xml:19:13-22:29
 action#android.intent.action.MAIN
-ADDED from /Users/naranjax/PLRPE/RPECalculatorApp/app/src/main/AndroidManifest.xml:19:17-69
+ADDED from /Users/naranjax/PLRPE/RPECalculatorApp/app/src/main/AndroidManifest.xml:20:17-69
 	android:name
-		ADDED from /Users/naranjax/PLRPE/RPECalculatorApp/app/src/main/AndroidManifest.xml:19:25-66
+		ADDED from /Users/naranjax/PLRPE/RPECalculatorApp/app/src/main/AndroidManifest.xml:20:25-66
 category#android.intent.category.LAUNCHER
-ADDED from /Users/naranjax/PLRPE/RPECalculatorApp/app/src/main/AndroidManifest.xml:20:17-77
+ADDED from /Users/naranjax/PLRPE/RPECalculatorApp/app/src/main/AndroidManifest.xml:21:17-77
 	android:name
-		ADDED from /Users/naranjax/PLRPE/RPECalculatorApp/app/src/main/AndroidManifest.xml:20:27-74
+		ADDED from /Users/naranjax/PLRPE/RPECalculatorApp/app/src/main/AndroidManifest.xml:21:27-74
 uses-sdk
 INJECTED from /Users/naranjax/PLRPE/RPECalculatorApp/app/src/main/AndroidManifest.xml reason: use-sdk injection requested
 INJECTED from /Users/naranjax/PLRPE/RPECalculatorApp/app/src/main/AndroidManifest.xml
@@ -257,7 +258,7 @@ ADDED from [androidx.core:core:1.12.0] /Users/naranjax/.gradle/caches/8.14.3/tra
 		ADDED from [androidx.core:core:1.12.0] /Users/naranjax/.gradle/caches/8.14.3/transforms/0b23180cc7701e753a38635d977fba8a/transformed/core-1.12.0/AndroidManifest.xml:24:9-44
 	android:name
 		ADDED from [androidx.core:core:1.12.0] /Users/naranjax/.gradle/caches/8.14.3/transforms/0b23180cc7701e753a38635d977fba8a/transformed/core-1.12.0/AndroidManifest.xml:23:9-81
-permission#com.rpecalc.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION
+permission#com.acantatore.rpecalc.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION
 ADDED from [androidx.core:core:1.12.0] /Users/naranjax/.gradle/caches/8.14.3/transforms/0b23180cc7701e753a38635d977fba8a/transformed/core-1.12.0/AndroidManifest.xml:22:5-24:47
 	android:protectionLevel
 		ADDED from [androidx.core:core:1.12.0] /Users/naranjax/.gradle/caches/8.14.3/transforms/0b23180cc7701e753a38635d977fba8a/transformed/core-1.12.0/AndroidManifest.xml:24:9-44
@@ -267,7 +268,7 @@ uses-permission#${applicationId}.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION
 ADDED from [androidx.core:core:1.12.0] /Users/naranjax/.gradle/caches/8.14.3/transforms/0b23180cc7701e753a38635d977fba8a/transformed/core-1.12.0/AndroidManifest.xml:26:5-97
 	android:name
 		ADDED from [androidx.core:core:1.12.0] /Users/naranjax/.gradle/caches/8.14.3/transforms/0b23180cc7701e753a38635d977fba8a/transformed/core-1.12.0/AndroidManifest.xml:26:22-94
-uses-permission#com.rpecalc.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION
+uses-permission#com.acantatore.rpecalc.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION
 ADDED from [androidx.core:core:1.12.0] /Users/naranjax/.gradle/caches/8.14.3/transforms/0b23180cc7701e753a38635d977fba8a/transformed/core-1.12.0/AndroidManifest.xml:26:5-97
 	android:name
 		ADDED from [androidx.core:core:1.12.0] /Users/naranjax/.gradle/caches/8.14.3/transforms/0b23180cc7701e753a38635d977fba8a/transformed/core-1.12.0/AndroidManifest.xml:26:22-94

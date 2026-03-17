@@ -1,62 +1,62 @@
 1<?xml version="1.0" encoding="utf-8"?>
 2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-3    package="com.rpecalc"
-4    android:versionCode="1"
-5    android:versionName="1.0" >
+3    package="com.acantatore.rpecalc"
+4    android:versionCode="2"
+5    android:versionName="1.0.1" >
 6
 7    <uses-sdk
 8        android:minSdkVersion="24"
-9        android:targetSdkVersion="34" />
+9        android:targetSdkVersion="35" />
 10
 11    <permission
 11-->[androidx.core:core:1.12.0] /Users/naranjax/.gradle/caches/8.14.3/transforms/0b23180cc7701e753a38635d977fba8a/transformed/core-1.12.0/AndroidManifest.xml:22:5-24:47
-12        android:name="com.rpecalc.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
+12        android:name="com.acantatore.rpecalc.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
 12-->[androidx.core:core:1.12.0] /Users/naranjax/.gradle/caches/8.14.3/transforms/0b23180cc7701e753a38635d977fba8a/transformed/core-1.12.0/AndroidManifest.xml:23:9-81
 13        android:protectionLevel="signature" />
 13-->[androidx.core:core:1.12.0] /Users/naranjax/.gradle/caches/8.14.3/transforms/0b23180cc7701e753a38635d977fba8a/transformed/core-1.12.0/AndroidManifest.xml:24:9-44
 14
-15    <uses-permission android:name="com.rpecalc.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" />
+15    <uses-permission android:name="com.acantatore.rpecalc.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" />
 15-->[androidx.core:core:1.12.0] /Users/naranjax/.gradle/caches/8.14.3/transforms/0b23180cc7701e753a38635d977fba8a/transformed/core-1.12.0/AndroidManifest.xml:26:5-97
 15-->[androidx.core:core:1.12.0] /Users/naranjax/.gradle/caches/8.14.3/transforms/0b23180cc7701e753a38635d977fba8a/transformed/core-1.12.0/AndroidManifest.xml:26:22-94
 16
 17    <application
-17-->/Users/naranjax/PLRPE/RPECalculatorApp/app/src/main/AndroidManifest.xml:5:5-23:19
+17-->/Users/naranjax/PLRPE/RPECalculatorApp/app/src/main/AndroidManifest.xml:6:5-24:19
 18        android:allowBackup="true"
-18-->/Users/naranjax/PLRPE/RPECalculatorApp/app/src/main/AndroidManifest.xml:6:9-35
+18-->/Users/naranjax/PLRPE/RPECalculatorApp/app/src/main/AndroidManifest.xml:7:9-35
 19        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
 19-->[androidx.core:core:1.12.0] /Users/naranjax/.gradle/caches/8.14.3/transforms/0b23180cc7701e753a38635d977fba8a/transformed/core-1.12.0/AndroidManifest.xml:28:18-86
 20        android:dataExtractionRules="@xml/data_extraction_rules"
-20-->/Users/naranjax/PLRPE/RPECalculatorApp/app/src/main/AndroidManifest.xml:7:9-65
+20-->/Users/naranjax/PLRPE/RPECalculatorApp/app/src/main/AndroidManifest.xml:8:9-65
 21        android:debuggable="true"
 22        android:extractNativeLibs="false"
 23        android:fullBackupContent="@xml/backup_rules"
-23-->/Users/naranjax/PLRPE/RPECalculatorApp/app/src/main/AndroidManifest.xml:8:9-54
+23-->/Users/naranjax/PLRPE/RPECalculatorApp/app/src/main/AndroidManifest.xml:9:9-54
 24        android:label="@string/app_name"
-24-->/Users/naranjax/PLRPE/RPECalculatorApp/app/src/main/AndroidManifest.xml:9:9-41
+24-->/Users/naranjax/PLRPE/RPECalculatorApp/app/src/main/AndroidManifest.xml:10:9-41
 25        android:supportsRtl="true"
-25-->/Users/naranjax/PLRPE/RPECalculatorApp/app/src/main/AndroidManifest.xml:10:9-35
+25-->/Users/naranjax/PLRPE/RPECalculatorApp/app/src/main/AndroidManifest.xml:11:9-35
 26        android:testOnly="true"
 27        android:theme="@style/Theme.RPECalc" >
-27-->/Users/naranjax/PLRPE/RPECalculatorApp/app/src/main/AndroidManifest.xml:11:9-45
+27-->/Users/naranjax/PLRPE/RPECalculatorApp/app/src/main/AndroidManifest.xml:12:9-45
 28        <activity
-28-->/Users/naranjax/PLRPE/RPECalculatorApp/app/src/main/AndroidManifest.xml:13:9-22:20
-29            android:name="com.rpecalc.MainActivity"
-29-->/Users/naranjax/PLRPE/RPECalculatorApp/app/src/main/AndroidManifest.xml:14:13-41
+28-->/Users/naranjax/PLRPE/RPECalculatorApp/app/src/main/AndroidManifest.xml:14:9-23:20
+29            android:name="com.acantatore.rpecalc.MainActivity"
+29-->/Users/naranjax/PLRPE/RPECalculatorApp/app/src/main/AndroidManifest.xml:15:13-41
 30            android:exported="true"
-30-->/Users/naranjax/PLRPE/RPECalculatorApp/app/src/main/AndroidManifest.xml:15:13-36
+30-->/Users/naranjax/PLRPE/RPECalculatorApp/app/src/main/AndroidManifest.xml:16:13-36
 31            android:label="@string/app_name"
-31-->/Users/naranjax/PLRPE/RPECalculatorApp/app/src/main/AndroidManifest.xml:16:13-45
+31-->/Users/naranjax/PLRPE/RPECalculatorApp/app/src/main/AndroidManifest.xml:17:13-45
 32            android:theme="@style/Theme.RPECalc" >
-32-->/Users/naranjax/PLRPE/RPECalculatorApp/app/src/main/AndroidManifest.xml:17:13-49
+32-->/Users/naranjax/PLRPE/RPECalculatorApp/app/src/main/AndroidManifest.xml:18:13-49
 33            <intent-filter>
-33-->/Users/naranjax/PLRPE/RPECalculatorApp/app/src/main/AndroidManifest.xml:18:13-21:29
+33-->/Users/naranjax/PLRPE/RPECalculatorApp/app/src/main/AndroidManifest.xml:19:13-22:29
 34                <action android:name="android.intent.action.MAIN" />
-34-->/Users/naranjax/PLRPE/RPECalculatorApp/app/src/main/AndroidManifest.xml:19:17-69
-34-->/Users/naranjax/PLRPE/RPECalculatorApp/app/src/main/AndroidManifest.xml:19:25-66
+34-->/Users/naranjax/PLRPE/RPECalculatorApp/app/src/main/AndroidManifest.xml:20:17-69
+34-->/Users/naranjax/PLRPE/RPECalculatorApp/app/src/main/AndroidManifest.xml:20:25-66
 35
 36                <category android:name="android.intent.category.LAUNCHER" />
-36-->/Users/naranjax/PLRPE/RPECalculatorApp/app/src/main/AndroidManifest.xml:20:17-77
-36-->/Users/naranjax/PLRPE/RPECalculatorApp/app/src/main/AndroidManifest.xml:20:27-74
+36-->/Users/naranjax/PLRPE/RPECalculatorApp/app/src/main/AndroidManifest.xml:21:17-77
+36-->/Users/naranjax/PLRPE/RPECalculatorApp/app/src/main/AndroidManifest.xml:21:27-74
 37            </intent-filter>
 38        </activity>
 39        <activity
@@ -76,7 +76,7 @@
 46-->[androidx.emoji2:emoji2:1.4.0] /Users/naranjax/.gradle/caches/8.14.3/transforms/de6ff73eee38d2c3d5062e48889554af/transformed/emoji2-1.4.0/AndroidManifest.xml:24:9-32:20
 47            android:name="androidx.startup.InitializationProvider"
 47-->[androidx.emoji2:emoji2:1.4.0] /Users/naranjax/.gradle/caches/8.14.3/transforms/de6ff73eee38d2c3d5062e48889554af/transformed/emoji2-1.4.0/AndroidManifest.xml:25:13-67
-48            android:authorities="com.rpecalc.androidx-startup"
+48            android:authorities="com.acantatore.rpecalc.androidx-startup"
 48-->[androidx.emoji2:emoji2:1.4.0] /Users/naranjax/.gradle/caches/8.14.3/transforms/de6ff73eee38d2c3d5062e48889554af/transformed/emoji2-1.4.0/AndroidManifest.xml:26:13-68
 49            android:exported="false" >
 49-->[androidx.emoji2:emoji2:1.4.0] /Users/naranjax/.gradle/caches/8.14.3/transforms/de6ff73eee38d2c3d5062e48889554af/transformed/emoji2-1.4.0/AndroidManifest.xml:27:13-37
