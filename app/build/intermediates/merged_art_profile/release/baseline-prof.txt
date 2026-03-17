@@ -1828,7 +1828,8 @@ HSPLt/n;->n(Lt/i0;)V
 Lt/o;
 HSPLt/o;-><init>(Ljava/lang/Object;ILjava/lang/Object;)V
 Lt/p;
-HSPLt/p;-><init>(Lp2/a;Ljava/lang/Object;II)V
+HSPLt/p;-><init>(Lz2/a;Lt/b;I)V
+HSPLt/p;->P(Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
 Lt/b0;
 HSPLt/b0;-><init>(IILjava/lang/Object;)V
 Lt/q;
@@ -5466,13 +5467,13 @@ HSPLq2/g;->equals(Ljava/lang/Object;)Z
 HSPLq2/h;-><init>([Ljava/lang/Object;)V
 HSPLq2/h;->toArray()[Ljava/lang/Object;
 HSPLq2/i;-><init>()V
-HSPLq2/i;->e(Ljava/lang/Object;)V
-HSPLq2/i;->i(I)V
+HSPLq2/i;->addLast(Ljava/lang/Object;)V
+HSPLq2/i;->h(I)V
 HSPLq2/i;->b()I
-HSPLq2/i;->j(I)I
+HSPLq2/i;->i(I)I
 HSPLq2/i;->isEmpty()Z
-HSPLq2/i;->k(I)I
-HSPLq2/i;->l()Ljava/lang/Object;
+HSPLq2/i;->j(I)I
+HSPLq2/i;->removeFirst()Ljava/lang/Object;
 HSPLc3/a;->Y([I[IIII)V
 HSPLc3/a;->Z([Ljava/lang/Object;[Ljava/lang/Object;III)V
 HSPLc3/a;->a0([I[III)V
@@ -6192,7 +6193,6 @@ HSPLt/g;->R(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
 HSPLt/g;->a(Lt/l;I)V
 HSPLt/o;->P(Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
 HSPLt/o;->a(Lt/c;Lt/x2;Lt/h0;)V
-HSPLt/p;->P(Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
 HSPLt/q;->a(Lt/s0;)V
 HSPLt/q;->b(Lt/s0;)V
 HSPLt/r;->compare(Ljava/lang/Object;Ljava/lang/Object;)I
