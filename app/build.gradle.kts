@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace = "com.rpecalc"
+    namespace = "com.acantatore.rpecalc"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.rpecalc"
+        applicationId = "com.acantatore.rpecalc"
         minSdk = 24
         targetSdk = 34
         versionCode = 1
@@ -20,10 +20,20 @@ android {
         }
     }
 
+    signingConfigs {
+        create("release") {
+            storeFile = file("release.jks")
+            storePassword = "rperelease2026"
+            keyAlias = "rpecalc_key"
+            keyPassword = "rperelease2026"
+        }
+    }
+
     buildTypes {
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            signingConfig = signingConfigs.getByName("release")
         }
     }
     compileOptions {

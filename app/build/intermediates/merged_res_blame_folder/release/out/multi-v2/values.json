@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "com.rpecalc.app-mergeReleaseResources-38:/values/values.xml",
+            "outputFile": "com.acantatore.rpecalc.app-mergeReleaseResources-38:/values/values.xml",
             "map": [
                 {
                     "source": "/Users/naranjax/.gradle/caches/8.14.3/transforms/c8cde84811caf1a5c4988636ddd89eb8/transformed/startup-runtime-1.1.1/res/values/values.xml",
@@ -74,6 +74,23 @@
                     }
                 },
                 {
+                    "source": "/Users/naranjax/PLRPE/RPECalculatorApp/app/src/main/res/values/themes.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endColumns": "84",
+                        "endOffsets": "135"
+                    },
+                    "to": {
+                        "startLines": "206",
+                        "startColumns": "4",
+                        "startOffsets": "12907",
+                        "endColumns": "83",
+                        "endOffsets": "12986"
+                    }
+                },
+                {
                     "source": "/Users/naranjax/.gradle/caches/8.14.3/transforms/37faec63d1268cb1e8fcfbd6894dee8a/transformed/lifecycle-viewmodel-2.6.2/res/values/values.xml",
                     "from": {
                         "startLines": "2",
@@ -127,7 +144,7 @@
                     }
                 },
                 {
-                    "source": "/Users/naranjax/RPECalc/app/src/main/res/values/strings.xml",
+                    "source": "/Users/naranjax/PLRPE/RPECalculatorApp/app/src/main/res/values/strings.xml",
                     "from": {
                         "startLines": "1",
                         "startColumns": "4",
@@ -177,23 +194,6 @@
                         "startOffsets": "5710",
                         "endColumns": "53",
                         "endOffsets": "5759"
-                    }
-                },
-                {
-                    "source": "/Users/naranjax/RPECalc/app/src/main/res/values/themes.xml",
-                    "from": {
-                        "startLines": "2",
-                        "startColumns": "4",
-                        "startOffsets": "55",
-                        "endColumns": "84",
-                        "endOffsets": "135"
-                    },
-                    "to": {
-                        "startLines": "206",
-                        "startColumns": "4",
-                        "startOffsets": "12907",
-                        "endColumns": "83",
-                        "endOffsets": "12986"
                     }
                 }
             ]

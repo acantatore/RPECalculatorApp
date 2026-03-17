@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "com.rpecalc.app-mergeReleaseResources-38:/values-et/values-et.xml",
+            "outputFile": "com.acantatore.rpecalc.app-mergeReleaseResources-38:/values-et/values-et.xml",
             "map": [
                 {
                     "source": "/Users/naranjax/.gradle/caches/8.14.3/transforms/d68d124011eb5aa9367318aefeddebd7/transformed/material3-1.1.2/res/values-et/values-et.xml",
