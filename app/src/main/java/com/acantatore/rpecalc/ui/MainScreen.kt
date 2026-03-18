@@ -236,11 +236,11 @@ fun MainScreen(
                     title = "Have",
                     currentPalette = currentPalette,
                     content = {
-                        RpeInputField("Weight", haveWeightInput, currentPalette) { haveWeightInput = it }
+                        RpeInputField("Weight", haveWeightInput, currentPalette, placeholder = "e.g. 100") { haveWeightInput = it }
                         Spacer(modifier = Modifier.height(10.dp))
-                        RpeInputField("Reps", haveRepsInput, currentPalette) { haveRepsInput = it }
+                        RpeInputField("Reps", haveRepsInput, currentPalette, placeholder = "1 – 15") { haveRepsInput = it }
                         Spacer(modifier = Modifier.height(10.dp))
-                        RpeInputField("RPE", haveRpeInput, currentPalette) { haveRpeInput = it }
+                        RpeInputField("RPE", haveRpeInput, currentPalette, placeholder = "4 – 10") { haveRpeInput = it }
 
                         Divider(modifier = Modifier.padding(vertical = 16.dp), color = BorderColor)
 
@@ -255,9 +255,9 @@ fun MainScreen(
                     title = "Want",
                     currentPalette = currentPalette,
                     content = {
-                        RpeInputField("Reps", wantRepsInput, currentPalette) { wantRepsInput = it }
+                        RpeInputField("Reps", wantRepsInput, currentPalette, placeholder = "1 – 15") { wantRepsInput = it }
                         Spacer(modifier = Modifier.height(10.dp))
-                        RpeInputField("RPE", wantRpeInput, currentPalette) { wantRpeInput = it }
+                        RpeInputField("RPE", wantRpeInput, currentPalette, placeholder = "4 – 10") { wantRpeInput = it }
 
                         Divider(modifier = Modifier.padding(vertical = 16.dp), color = BorderColor)
 
@@ -357,6 +357,7 @@ fun RpeInputField(
     label: String,
     value: String,
     currentPalette: AppPalette,
+    placeholder: String = "",
     onValueChange: (String) -> Unit
 ) {
     Row(
@@ -381,9 +382,12 @@ fun RpeInputField(
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
             modifier = Modifier.width(110.dp),
             textStyle = LocalTextStyle.current.copy(
-                fontSize = 14.sp,
+                fontSize = 16.sp,
                 color = TextPrimary
             ),
+            placeholder = if (placeholder.isNotEmpty()) ({
+                Text(text = placeholder, fontSize = 12.sp, color = TextSecondary)
+            }) else null,
             singleLine = true,
             colors = OutlinedTextFieldDefaults.colors(
                 focusedBorderColor = currentPalette.accent,
