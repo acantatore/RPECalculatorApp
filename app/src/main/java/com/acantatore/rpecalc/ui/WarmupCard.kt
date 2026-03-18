@@ -48,11 +48,11 @@ fun WarmupCard(
             .fillMaxWidth()
             .shadow(
                 elevation = 20.dp,
-                shape = RoundedCornerShape(5.dp),
+                shape = RoundedCornerShape(8.dp),
                 spotColor = CardShadow,
                 ambientColor = CardShadow
             ),
-        shape = RoundedCornerShape(5.dp),
+        shape = RoundedCornerShape(8.dp),
         colors = CardDefaults.cardColors(containerColor = CardBackground)
     ) {
         Column {
