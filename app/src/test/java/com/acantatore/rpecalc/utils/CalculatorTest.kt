@@ -147,4 +147,94 @@ class CalculatorTest {
         val pctNoReps = Calculator.percentage(0, 8.0)
         assertEquals(0.0, pctNoReps, 0.01)
     }
+
+    @Test
+    fun `percentage returns 0 when x is 16 or more`() {
+        // x = (10 - rpe) + (reps - 1); at rpe=4, reps=11 → x=16 → 0
+        assertEquals(0.0, Calculator.percentage(11, 4.0), 0.01)
+        // x=15 (rpe=4, reps=10) should still produce a nonzero result
+        assertTrue(Calculator.percentage(10, 4.0) > 0.0)
+    }
+
+    @Test
+    fun `percentage quadratic branch is used for x below 2_92`() {
+        // x=1 (1@9): quadratic gives ~95.71
+        val pct1at9 = Calculator.percentage(1, 9.0)
+        assertTrue(pct1at9 > 94.0)
+        assertTrue(pct1at9 < 97.0)
+    }
+
+    @Test
+    fun `percentage produces exact value for known point`() {
+        // 5@8: x = 2+4 = 6, linear = -2.64249*6 + 97.0955 ≈ 81.24
+        assertEquals(81.24, Calculator.percentage(5, 8.0), 0.1)
+    }
+
+    // ── maxReps ────────────────────────────────────────────────────────────────
+
+    @Test
+    fun `maxReps returns 0 for non-positive rpe`() {
+        assertEquals(0, Calculator.maxReps(0.0))
+        assertEquals(0, Calculator.maxReps(-1.0))
+    }
+
+    @Test
+    fun `maxReps returns correct values for standard rpe values`() {
+        assertEquals(15, Calculator.maxReps(10.0))
+        assertEquals(12, Calculator.maxReps(7.0))
+        assertEquals(9,  Calculator.maxReps(4.0))
+    }
+
+    @Test
+    fun `maxReps clamps rpe above 10 to 15`() {
+        assertEquals(15, Calculator.maxReps(11.0))
+        assertEquals(15, Calculator.maxReps(100.0))
+    }
+
+    @Test
+    fun `maxReps clamps rpe below 4 to 9`() {
+        // 3.0 > 0, goes through clamping path to 4 → 9
+        assertEquals(9, Calculator.maxReps(3.0))
+        assertEquals(9, Calculator.maxReps(1.0))
+    }
+
+    @Test
+    fun `maxReps handles fractional rpe`() {
+        // RPE 7.5: (10-7.5).toInt() = 2, 15-2 = 13
+        assertEquals(13, Calculator.maxReps(7.5))
+        // RPE 6.5: (10-6.5).toInt() = 3, 15-3 = 12
+        assertEquals(12, Calculator.maxReps(6.5))
+    }
+
+    @Test
+    fun `maxReps is consistent with percentage — at maxReps percentage is always nonzero`() {
+        // The UI uses maxReps to cap user input; at that cap, E1RM must still be calculable.
+        // maxReps is conservative (2 below the true x>=16 boundary) to keep the UX safe.
+        for (rpe in listOf(4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0)) {
+            val max = Calculator.maxReps(rpe)
+            assertTrue(
+                "percentage should be >0 at reps=$max, rpe=$rpe",
+                Calculator.percentage(max, rpe) > 0.0
+            )
+        }
+    }
+
+    @Test
+    fun `percentage returns 0 at the true x=16 zero boundary`() {
+        // For integer RPEs the true zero boundary is reps = 17 - (10 - rpe).toInt()
+        // which is always maxReps + 2.
+        val cases = mapOf(10.0 to 17, 9.0 to 16, 8.0 to 15, 7.0 to 14, 6.0 to 13, 5.0 to 12, 4.0 to 11)
+        for ((rpe, zeroBoundary) in cases) {
+            assertEquals(
+                "percentage should be 0 at reps=$zeroBoundary, rpe=$rpe",
+                0.0,
+                Calculator.percentage(zeroBoundary, rpe),
+                0.01
+            )
+            assertTrue(
+                "percentage should be >0 at reps=${zeroBoundary - 1}, rpe=$rpe",
+                Calculator.percentage(zeroBoundary - 1, rpe) > 0.0
+            )
+        }
+    }
 }
