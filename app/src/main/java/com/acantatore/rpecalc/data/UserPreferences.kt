@@ -39,7 +39,8 @@ private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(na
 data class UserPreferencesData(
     val unitSystem: UnitSystem = UnitSystem.KG,
     val barWeight: Double = 20.0,
-    val warmupProtocol: WarmupProtocol = WarmupProtocol.DEFAULT
+    val warmupProtocol: WarmupProtocol = WarmupProtocol.DEFAULT,
+    val paletteName: String = "Original Purple"
 )
 
 /**
@@ -52,6 +53,7 @@ class UserPreferences(private val context: Context) {
         private val BAR_WEIGHT = doublePreferencesKey("bar_weight")
         private val PROTOCOL_NAME = stringPreferencesKey("protocol_name")
         private val PROTOCOL_STEPS = stringPreferencesKey("protocol_steps")
+        private val PALETTE_NAME = stringPreferencesKey("palette_name")
     }
 
     /**
@@ -69,10 +71,13 @@ class UserPreferences(private val context: Context) {
             preferences[PROTOCOL_STEPS]
         )
 
+        val paletteName = preferences[PALETTE_NAME] ?: "Original Purple"
+
         UserPreferencesData(
             unitSystem = unitSystem,
             barWeight = barWeight,
-            warmupProtocol = protocol
+            warmupProtocol = protocol,
+            paletteName = paletteName
         )
     }
 
@@ -91,6 +96,15 @@ class UserPreferences(private val context: Context) {
     suspend fun setBarWeight(weight: Double) {
         context.dataStore.edit { preferences ->
             preferences[BAR_WEIGHT] = weight
+        }
+    }
+
+    /**
+     * Updates the palette name.
+     */
+    suspend fun setPaletteName(name: String) {
+        context.dataStore.edit { preferences ->
+            preferences[PALETTE_NAME] = name
         }
     }
 
