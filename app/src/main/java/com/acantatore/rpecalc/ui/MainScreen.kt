@@ -270,7 +270,7 @@ fun MainScreen(
 
                         Divider(modifier = Modifier.padding(vertical = 16.dp), color = BorderColor)
 
-                        ResultRow("E1RM", e1rmDisplay ?: "")
+                        ResultRow("E1RM", e1rmDisplay ?: "", currentPalette)
                     }
                 )
 
@@ -287,7 +287,7 @@ fun MainScreen(
 
                         Divider(modifier = Modifier.padding(vertical = 16.dp), color = BorderColor)
 
-                        ResultRow("Weight", targetWeightDisplay ?: "")
+                        ResultRow("Weight", targetWeightDisplay ?: "", currentPalette)
                     }
                 )
 
@@ -441,7 +441,7 @@ fun RpeInputField(
 }
 
 @Composable
-fun ResultRow(label: String, result: String) {
+fun ResultRow(label: String, result: String, currentPalette: AppPalette) {
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween,
@@ -459,9 +459,9 @@ fun ResultRow(label: String, result: String) {
         ) {
             Text(
                 text = if (result.isEmpty()) "—" else result,
-                fontSize = 18.sp,
+                fontSize = if (result.isEmpty()) 18.sp else 22.sp,
                 fontWeight = FontWeight.Bold,
-                color = if (result.isEmpty()) TextSecondary else TextPrimary
+                color = if (result.isEmpty()) TextSecondary else currentPalette.accent
             )
         }
     }
