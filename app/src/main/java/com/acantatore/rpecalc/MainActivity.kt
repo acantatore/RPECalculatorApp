@@ -76,13 +76,13 @@ class MainActivity : ComponentActivity() {
                                     userPreferences.setWarmupProtocol(protocol)
                                 }
                             },
+                            onPaletteChange = { currentPalette = it },
                             onBack = { showSettings = false }
                         )
                     } else {
                         MainScreen(
                             currentPalette = currentPalette,
                             preferences = preferences,
-                            onPaletteChange = { currentPalette = it },
                             onNavigateToSettings = { showSettings = true }
                         )
                     }

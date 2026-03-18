@@ -38,6 +38,7 @@ import com.acantatore.rpecalc.ui.theme.*
 import com.acantatore.rpecalc.utils.BarWeight
 import com.acantatore.rpecalc.utils.UnitSystem
 import com.acantatore.rpecalc.utils.WarmupProtocol
+import androidx.compose.ui.graphics.Color
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -47,6 +48,7 @@ fun SettingsScreen(
     onUnitChange: (UnitSystem) -> Unit,
     onBarWeightChange: (Double) -> Unit,
     onProtocolChange: (WarmupProtocol) -> Unit,
+    onPaletteChange: (AppPalette) -> Unit,
     onBack: () -> Unit
 ) {
     Column(
@@ -145,6 +147,63 @@ fun SettingsScreen(
                                     expanded = false
                                 }
                             )
+                        }
+                    }
+                }
+            }
+
+            Spacer(modifier = Modifier.height(24.dp))
+
+            // Theme Section
+            SettingsSection(title = "Theme", currentPalette = currentPalette) {
+                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Palettes.forEach { palette ->
+                        val isSelected = currentPalette.name == palette.name
+                        Card(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clickable { onPaletteChange(palette) },
+                            colors = CardDefaults.cardColors(
+                                containerColor = if (isSelected) currentPalette.accent.copy(alpha = 0.2f) else CardBackground
+                            ),
+                            shape = RoundedCornerShape(8.dp)
+                        ) {
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(12.dp),
+                                horizontalArrangement = Arrangement.SpaceBetween,
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Row(
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.spacedBy(10.dp)
+                                ) {
+                                    // Palette preview swatch
+                                    Box(
+                                        modifier = Modifier
+                                            .size(20.dp)
+                                            .background(
+                                                brush = androidx.compose.ui.graphics.Brush.horizontalGradient(
+                                                    colors = listOf(palette.gradientStart, palette.gradientEnd)
+                                                ),
+                                                shape = RoundedCornerShape(4.dp)
+                                            )
+                                    )
+                                    Text(
+                                        text = palette.name,
+                                        fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal,
+                                        color = if (isSelected) currentPalette.accent else TextPrimary
+                                    )
+                                }
+                                if (isSelected) {
+                                    Text(
+                                        text = "Selected",
+                                        fontSize = 12.sp,
+                                        color = currentPalette.accent
+                                    )
+                                }
+                            }
                         }
                     }
                 }

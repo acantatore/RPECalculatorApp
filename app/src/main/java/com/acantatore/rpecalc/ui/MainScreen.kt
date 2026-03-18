@@ -40,7 +40,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Info
-import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Settings
 import com.acantatore.rpecalc.data.UserPreferencesData
 import com.acantatore.rpecalc.ui.theme.*
@@ -54,7 +53,6 @@ import kotlin.math.roundToInt
 fun MainScreen(
     currentPalette: AppPalette,
     preferences: UserPreferencesData,
-    onPaletteChange: (AppPalette) -> Unit,
     onNavigateToSettings: () -> Unit
 ) {
     var haveWeightInput by remember { mutableStateOf("") }
@@ -72,7 +70,6 @@ fun MainScreen(
     var warmupSets by remember { mutableStateOf<List<WarmupSet>>(emptyList()) }
 
     var showAboutDialog by remember { mutableStateOf(false) }
-    var showPaletteMenu by remember { mutableStateOf(false) }
 
     // Inline validation — only shown when field is non-empty and out of range
     val haveRpeError: String? = run {
@@ -186,33 +183,6 @@ fun MainScreen(
                         contentDescription = "Settings",
                         tint = currentPalette.accent
                     )
-                }
-
-                // Theme picker
-                Box {
-                    IconButton(onClick = { showPaletteMenu = true }) {
-                        Icon(
-                            imageVector = Icons.Default.MoreVert,
-                            contentDescription = "Change Theme",
-                            tint = currentPalette.accent
-                        )
-                    }
-
-                    DropdownMenu(
-                        expanded = showPaletteMenu,
-                        onDismissRequest = { showPaletteMenu = false },
-                        modifier = Modifier.background(CardBackground)
-                    ) {
-                        Palettes.forEach { palette ->
-                            DropdownMenuItem(
-                                text = { Text(palette.name, color = TextPrimary) },
-                                onClick = {
-                                    onPaletteChange(palette)
-                                    showPaletteMenu = false
-                                }
-                            )
-                        }
-                    }
                 }
 
                 // About
