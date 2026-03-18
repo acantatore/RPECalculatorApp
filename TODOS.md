@@ -27,32 +27,6 @@
 
 ---
 
-### Persist Theme Selection
-**Priority:** P2 | **Effort:** S | **Status:** Deferred from design review
-
-**What:** Save the selected color palette name to DataStore so the theme survives app restarts.
-
-**Why:** Theme was moved from the AppBar overflow menu into Settings (design review 2026-03-18). Users strongly expect settings-screen choices to persist across launches. Currently resets to "Original Purple" on every cold start.
-
-**Pros:**
-- Removes a surprising inconsistency (setting visible in Settings but not durable)
-- Low effort — DataStore already in use for unit system, bar weight, warmup protocol
-
-**Cons:**
-- Palette objects can't be stored directly — need to store by name string and look up in `Palettes` list on restore
-- If a palette name changes or is removed in a future version, the stored name won't match and must fall back gracefully
-
-**Context:** Deferred during eng review 2026-03-18. The in-memory approach is documented in DESIGN.md ("Palette is in-memory state only — not persisted"). That decision was made before theme moved to Settings.
-
-**Implementation notes:**
-- Add `paletteName: String` to `UserPreferencesData` with default `"Original Purple"`
-- Add `setPaletteName(name: String)` to `UserPreferences`
-- On MainActivity start: read `paletteName` from preferences, find matching palette in `Palettes` list, fall back to `Palettes[0]` if not found
-- `onPaletteChange` in MainActivity saves name to DataStore alongside setting the in-memory state
-
-**Depends on:** Nothing — DataStore infra already present
-
----
 
 ## Future Phases
 
@@ -81,8 +55,8 @@
 - Minimum viable chart: a simple line chart or table sorted by date with E1RM delta
 - Navigation: add `showHistory: Boolean` nav state alongside `showSettings`
 
-**Depends on:** Session Log feature (Room DB + SessionEntity) must ship first
-**Blocked by:** Nothing once Session Log is implemented
+**Depends on:** ~~Session Log feature~~ — shipped in v1.1.0
+**Blocked by:** Nothing
 
 ---
 
@@ -91,3 +65,15 @@ Graphs and trends for E1RM progression (superseded by E1RM History Screen above)
 
 ### Phase 4: Program Templates
 Pre-built training programs with RPE targets.
+
+---
+
+## Completed
+
+### Session Logging
+**Completed:** v1.1.0 (2026-03-18)
+Lift selector, Log Session button, snackbar confirmation, SQLite data layer (SessionDao/AppDatabase/SessionRepository). Weights stored in kg regardless of active unit system.
+
+### Persist Theme Selection
+**Completed:** v1.1.0 (2026-03-18)
+Palette name persisted to DataStore; restored on cold start with graceful fallback to Palettes[0].
