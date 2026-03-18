@@ -18,7 +18,9 @@
 package com.acantatore.rpecalc.ui
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.foundation.background
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -41,18 +43,23 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Settings
+import com.acantatore.rpecalc.data.SessionRepository
 import com.acantatore.rpecalc.data.UserPreferencesData
 import com.acantatore.rpecalc.ui.theme.*
 import com.acantatore.rpecalc.utils.Calculator
+import com.acantatore.rpecalc.utils.LiftType
 import com.acantatore.rpecalc.utils.UnitSystem
 import com.acantatore.rpecalc.utils.WarmupSet
+import kotlinx.coroutines.launch
 import java.util.Locale
 import kotlin.math.roundToInt
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreen(
     currentPalette: AppPalette,
     preferences: UserPreferencesData,
+    sessionRepository: SessionRepository,
     onNavigateToSettings: () -> Unit
 ) {
     var haveWeightInput by remember { mutableStateOf("") }
@@ -69,7 +76,13 @@ fun MainScreen(
 
     var warmupSets by remember { mutableStateOf<List<WarmupSet>>(emptyList()) }
 
+    var selectedLift by remember { mutableStateOf(LiftType.SQUAT) }
+
     var showAboutDialog by remember { mutableStateOf(false) }
+
+    var isLogging by remember { mutableStateOf(false) }
+    val snackbarHostState = remember { SnackbarHostState() }
+    val coroutineScope = rememberCoroutineScope()
 
     // Validation — only shown when field is non-empty and out of range
     val haveRpeError  = validateRpe(haveRpeInput)
@@ -100,8 +113,6 @@ fun MainScreen(
                     if (tw > 0) {
                         targetWeightResult = tw
                         targetWeightDisplay = String.format(Locale.getDefault(), "%.1f", tw)
-
-                        // Generate warmup sets
                         warmupSets = Calculator.generateWarmupSets(
                             workingWeight = tw,
                             barWeight = preferences.barWeight,
@@ -134,131 +145,206 @@ fun MainScreen(
         }
     }
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .verticalScroll(rememberScrollState())
-            .background(BackgroundColor)
-    ) {
-        // App Bar
-        Row(
+    Box(modifier = Modifier.fillMaxSize()) {
+        Column(
             modifier = Modifier
-                .fillMaxWidth()
-                .background(CardBackground)
-                .padding(horizontal = 16.dp, vertical = 16.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState())
+                .background(BackgroundColor)
         ) {
-            Text(
-                text = "RPE Calculator",
-                style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
-                color = currentPalette.accent
-            )
-
-            Row {
-                // Settings icon
-                IconButton(onClick = onNavigateToSettings) {
-                    Icon(
-                        imageVector = Icons.Default.Settings,
-                        contentDescription = "Settings",
-                        tint = currentPalette.accent
-                    )
-                }
-
-                // About
-                IconButton(onClick = { showAboutDialog = true }) {
-                    Icon(
-                        imageVector = Icons.Default.Info,
-                        contentDescription = "About",
-                        tint = currentPalette.accent
-                    )
-                }
-            }
-        }
-
-        // Unit indicator
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(CardBackground)
-                .padding(horizontal = 16.dp, vertical = 4.dp),
-            horizontalArrangement = Arrangement.End
-        ) {
-            val barDisplay = if (preferences.unitSystem == UnitSystem.KG)
-                "${preferences.barWeight.toInt()} kg"
-            else
-                "${(preferences.barWeight * 2.205).roundToInt()} lbs"
-            Text(
-                text = "Unit: ${preferences.unitSystem.label} | Bar: $barDisplay",
-                fontSize = 12.sp,
-                color = TextSecondary
-            )
-        }
-
-        // Gradient background area for cards
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(
-                    brush = Brush.horizontalGradient(
-                        colors = listOf(currentPalette.gradientStart, currentPalette.gradientEnd)
-                    )
-                )
-                .padding(vertical = 26.dp, horizontal = 16.dp)
-        ) {
-            Column(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalAlignment = Alignment.CenterHorizontally
+            // App Bar
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(CardBackground)
+                    .padding(horizontal = 16.dp, vertical = 16.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                // HAVE CARD
-                InputCard(
-                    title = "Have",
-                    currentPalette = currentPalette,
-                    content = {
-                        RpeInputField("Weight", haveWeightInput, currentPalette, placeholder = "e.g. 100") { haveWeightInput = it }
-                        Spacer(modifier = Modifier.height(10.dp))
-                        RpeInputField("Reps", haveRepsInput, currentPalette, placeholder = "1 – 15", error = haveRepsError) { haveRepsInput = it }
-                        Spacer(modifier = Modifier.height(10.dp))
-                        RpeInputField("RPE", haveRpeInput, currentPalette, placeholder = "4 – 10", error = haveRpeError) { haveRpeInput = it }
-
-                        Divider(modifier = Modifier.padding(vertical = 16.dp), color = BorderColor)
-
-                        ResultRow("E1RM", e1rmDisplay ?: "", currentPalette)
-                    }
+                Text(
+                    text = "RPE Calculator",
+                    style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
+                    color = currentPalette.accent
                 )
 
-                Spacer(modifier = Modifier.height(26.dp))
-
-                // WANT CARD
-                InputCard(
-                    title = "Want",
-                    currentPalette = currentPalette,
-                    content = {
-                        RpeInputField("Reps", wantRepsInput, currentPalette, placeholder = "1 – 15", error = wantRepsError) { wantRepsInput = it }
-                        Spacer(modifier = Modifier.height(10.dp))
-                        RpeInputField("RPE", wantRpeInput, currentPalette, placeholder = "4 – 10", error = wantRpeError, imeAction = ImeAction.Done) { wantRpeInput = it }
-
-                        Divider(modifier = Modifier.padding(vertical = 16.dp), color = BorderColor)
-
-                        ResultRow("Weight", targetWeightDisplay ?: "", currentPalette)
+                Row {
+                    IconButton(onClick = onNavigateToSettings) {
+                        Icon(
+                            imageVector = Icons.Default.Settings,
+                            contentDescription = "Settings",
+                            tint = currentPalette.accent
+                        )
                     }
-                )
-
-                // WARMUP CARD - shows when target weight is calculated
-                AnimatedVisibility(visible = warmupSets.isNotEmpty()) {
-                    Column {
-                        Spacer(modifier = Modifier.height(26.dp))
-                        WarmupCard(
-                            warmupSets = warmupSets,
-                            unit = preferences.unitSystem,
-                            currentPalette = currentPalette
+                    IconButton(onClick = { showAboutDialog = true }) {
+                        Icon(
+                            imageVector = Icons.Default.Info,
+                            contentDescription = "About",
+                            tint = currentPalette.accent
                         )
                     }
                 }
             }
+
+            // Unit indicator
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(CardBackground)
+                    .padding(horizontal = 16.dp, vertical = 4.dp),
+                horizontalArrangement = Arrangement.End
+            ) {
+                val barDisplay = if (preferences.unitSystem == UnitSystem.KG)
+                    "${preferences.barWeight.toInt()} kg"
+                else
+                    "${(preferences.barWeight * 2.205).roundToInt()} lbs"
+                Text(
+                    text = "Unit: ${preferences.unitSystem.label} | Bar: $barDisplay",
+                    fontSize = 12.sp,
+                    color = TextSecondary
+                )
+            }
+
+            // Gradient background area for cards
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(
+                        brush = Brush.horizontalGradient(
+                            colors = listOf(currentPalette.gradientStart, currentPalette.gradientEnd)
+                        )
+                    )
+                    .padding(vertical = 26.dp, horizontal = 16.dp)
+            ) {
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    // HAVE CARD
+                    InputCard(
+                        title = "Have",
+                        currentPalette = currentPalette,
+                        content = {
+                            // Lift selector
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .horizontalScroll(rememberScrollState()),
+                                horizontalArrangement = Arrangement.spacedBy(6.dp)
+                            ) {
+                                LiftType.entries.forEach { lift ->
+                                    FilterChip(
+                                        selected = selectedLift == lift,
+                                        onClick = { selectedLift = lift },
+                                        label = {
+                                            Text(
+                                                text = lift.displayName,
+                                                fontSize = 12.sp
+                                            )
+                                        },
+                                        colors = FilterChipDefaults.filterChipColors(
+                                            selectedContainerColor = currentPalette.accent,
+                                            selectedLabelColor = Color.White
+                                        )
+                                    )
+                                }
+                            }
+
+                            Spacer(modifier = Modifier.height(10.dp))
+                            RpeInputField("Weight", haveWeightInput, currentPalette, placeholder = "e.g. 100") { haveWeightInput = it }
+                            Spacer(modifier = Modifier.height(10.dp))
+                            RpeInputField("Reps", haveRepsInput, currentPalette, placeholder = "1 – 15", error = haveRepsError) { haveRepsInput = it }
+                            Spacer(modifier = Modifier.height(10.dp))
+                            RpeInputField("RPE", haveRpeInput, currentPalette, placeholder = "4 – 10", error = haveRpeError) { haveRpeInput = it }
+
+                            Divider(modifier = Modifier.padding(vertical = 16.dp), color = BorderColor)
+
+                            ResultRow("E1RM", e1rmDisplay ?: "", currentPalette)
+
+                            // Log Session button — visible once E1RM is calculated
+                            AnimatedVisibility(visible = e1rmResult != null) {
+                                Column {
+                                    Spacer(modifier = Modifier.height(12.dp))
+                                    Button(
+                                        onClick = {
+                                            val w = haveWeightInput.toDoubleOrNull() ?: return@Button
+                                            val r = haveRepsInput.toIntOrNull() ?: return@Button
+                                            val rpe = haveRpeInput.toDoubleOrNull() ?: return@Button
+                                            val e1rm = e1rmResult ?: return@Button
+                                            isLogging = true
+                                            coroutineScope.launch {
+                                                try {
+                                                    sessionRepository.logSession(
+                                                        lift = selectedLift,
+                                                        weight = w,
+                                                        reps = r,
+                                                        rpe = rpe,
+                                                        e1rm = e1rm,
+                                                        unit = preferences.unitSystem
+                                                    )
+                                                    snackbarHostState.showSnackbar("Session logged ✓")
+                                                } catch (e: Exception) {
+                                                    snackbarHostState.showSnackbar("Failed to log session")
+                                                } finally {
+                                                    isLogging = false
+                                                }
+                                            }
+                                        },
+                                        enabled = !isLogging,
+                                        modifier = Modifier.fillMaxWidth(),
+                                        colors = ButtonDefaults.buttonColors(
+                                            containerColor = currentPalette.accent
+                                        ),
+                                        shape = RoundedCornerShape(8.dp)
+                                    ) {
+                                        Text(
+                                            text = if (isLogging) "Logging…" else "Log Session",
+                                            color = Color.White
+                                        )
+                                    }
+                                }
+                            }
+                        }
+                    )
+
+                    Spacer(modifier = Modifier.height(26.dp))
+
+                    // WANT CARD
+                    InputCard(
+                        title = "Want",
+                        currentPalette = currentPalette,
+                        content = {
+                            RpeInputField("Reps", wantRepsInput, currentPalette, placeholder = "1 – 15", error = wantRepsError) { wantRepsInput = it }
+                            Spacer(modifier = Modifier.height(10.dp))
+                            RpeInputField("RPE", wantRpeInput, currentPalette, placeholder = "4 – 10", error = wantRpeError, imeAction = ImeAction.Done) { wantRpeInput = it }
+
+                            Divider(modifier = Modifier.padding(vertical = 16.dp), color = BorderColor)
+
+                            ResultRow("Weight", targetWeightDisplay ?: "", currentPalette)
+                        }
+                    )
+
+                    // WARMUP CARD
+                    AnimatedVisibility(visible = warmupSets.isNotEmpty()) {
+                        Column {
+                            Spacer(modifier = Modifier.height(26.dp))
+                            WarmupCard(
+                                warmupSets = warmupSets,
+                                unit = preferences.unitSystem,
+                                currentPalette = currentPalette
+                            )
+                        }
+                    }
+                }
+            }
+
+            Spacer(modifier = Modifier.height(32.dp))
         }
 
-        Spacer(modifier = Modifier.height(32.dp))
+        // Snackbar overlaid at the bottom
+        SnackbarHost(
+            hostState = snackbarHostState,
+            modifier = Modifier.align(Alignment.BottomCenter)
+        )
     }
 
     if (showAboutDialog) {
