@@ -231,7 +231,7 @@ fun MainScreen(
                                     .horizontalScroll(rememberScrollState()),
                                 horizontalArrangement = Arrangement.spacedBy(6.dp)
                             ) {
-                                LiftType.values().forEach { lift ->
+                                LiftType.entries.forEach { lift ->
                                     FilterChip(
                                         selected = selectedLift == lift,
                                         onClick = { selectedLift = lift },
