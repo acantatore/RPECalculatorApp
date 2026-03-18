@@ -71,31 +71,11 @@ fun MainScreen(
 
     var showAboutDialog by remember { mutableStateOf(false) }
 
-    // Inline validation — only shown when field is non-empty and out of range
-    val haveRpeError: String? = run {
-        val rpe = haveRpeInput.toDoubleOrNull() ?: return@run null
-        when {
-            rpe < 4.0 -> "Min RPE is 4"
-            rpe > 10.0 -> "Max RPE is 10"
-            else -> null
-        }
-    }
-    val haveRepsError: String? = run {
-        val reps = haveRepsInput.toIntOrNull() ?: return@run null
-        if (reps > 15) "Max 15 reps" else null
-    }
-    val wantRpeError: String? = run {
-        val rpe = wantRpeInput.toDoubleOrNull() ?: return@run null
-        when {
-            rpe < 4.0 -> "Min RPE is 4"
-            rpe > 10.0 -> "Max RPE is 10"
-            else -> null
-        }
-    }
-    val wantRepsError: String? = run {
-        val reps = wantRepsInput.toIntOrNull() ?: return@run null
-        if (reps > 15) "Max 15 reps" else null
-    }
+    // Validation — only shown when field is non-empty and out of range
+    val haveRpeError  = validateRpe(haveRpeInput)
+    val haveRepsError = validateReps(haveRepsInput, haveRpeInput)
+    val wantRpeError  = validateRpe(wantRpeInput)
+    val wantRepsError = validateReps(wantRepsInput, wantRpeInput)
 
     // Automatic re-calc when inputs or preferences change
     LaunchedEffect(
@@ -444,4 +424,23 @@ fun ResultRow(label: String, result: String, currentPalette: AppPalette) {
             )
         }
     }
+}
+
+// Validation helpers — internal so they are testable from the test source set.
+// Only return an error string when the field is non-empty AND out of the valid range.
+
+internal fun validateRpe(input: String): String? {
+    val rpe = input.toDoubleOrNull() ?: return null
+    return when {
+        rpe < 4.0  -> "Min RPE is 4"
+        rpe > 10.0 -> "Max RPE is 10"
+        else       -> null
+    }
+}
+
+internal fun validateReps(repsInput: String, rpeInput: String): String? {
+    val reps = repsInput.toIntOrNull() ?: return null
+    val rpe  = rpeInput.toDoubleOrNull()
+    val max  = if (rpe != null) Calculator.maxReps(rpe) else 15
+    return if (reps > max) "Max $max reps at this RPE" else null
 }

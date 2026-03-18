@@ -38,7 +38,6 @@ import com.acantatore.rpecalc.ui.theme.*
 import com.acantatore.rpecalc.utils.BarWeight
 import com.acantatore.rpecalc.utils.UnitSystem
 import com.acantatore.rpecalc.utils.WarmupProtocol
-import androidx.compose.ui.graphics.Color
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
