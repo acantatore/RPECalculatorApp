@@ -22,6 +22,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
@@ -32,7 +33,9 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.material.icons.Icons
@@ -283,7 +286,7 @@ fun MainScreen(
                     content = {
                         RpeInputField("Reps", wantRepsInput, currentPalette, placeholder = "1 – 15", error = wantRepsError) { wantRepsInput = it }
                         Spacer(modifier = Modifier.height(10.dp))
-                        RpeInputField("RPE", wantRpeInput, currentPalette, placeholder = "4 – 10", error = wantRpeError) { wantRpeInput = it }
+                        RpeInputField("RPE", wantRpeInput, currentPalette, placeholder = "4 – 10", error = wantRpeError, imeAction = ImeAction.Done) { wantRpeInput = it }
 
                         Divider(modifier = Modifier.padding(vertical = 16.dp), color = BorderColor)
 
@@ -385,8 +388,10 @@ fun RpeInputField(
     currentPalette: AppPalette,
     placeholder: String = "",
     error: String? = null,
+    imeAction: ImeAction = ImeAction.Next,
     onValueChange: (String) -> Unit
 ) {
+    val focusManager = LocalFocusManager.current
     Column {
     Row(
         modifier = Modifier.fillMaxWidth(),
@@ -407,7 +412,11 @@ fun RpeInputField(
                     onValueChange(it)
                 }
             },
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number, imeAction = imeAction),
+            keyboardActions = KeyboardActions(
+                onNext = { focusManager.moveFocus(androidx.compose.ui.focus.FocusDirection.Down) },
+                onDone = { focusManager.clearFocus() }
+            ),
             modifier = Modifier.width(110.dp),
             textStyle = LocalTextStyle.current.copy(
                 fontSize = 16.sp,
