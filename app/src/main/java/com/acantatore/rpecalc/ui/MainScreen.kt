@@ -42,8 +42,10 @@ import androidx.compose.material.icons.filled.Settings
 import com.acantatore.rpecalc.data.UserPreferencesData
 import com.acantatore.rpecalc.ui.theme.*
 import com.acantatore.rpecalc.utils.Calculator
+import com.acantatore.rpecalc.utils.UnitSystem
 import com.acantatore.rpecalc.utils.WarmupSet
 import java.util.Locale
+import kotlin.math.roundToInt
 
 @Composable
 fun MainScreen(
@@ -203,8 +205,12 @@ fun MainScreen(
                 .padding(horizontal = 16.dp, vertical = 4.dp),
             horizontalArrangement = Arrangement.End
         ) {
+            val barDisplay = if (preferences.unitSystem == UnitSystem.KG)
+                "${preferences.barWeight.toInt()} kg"
+            else
+                "${(preferences.barWeight * 2.205).roundToInt()} lbs"
             Text(
-                text = "Unit: ${preferences.unitSystem.label} | Bar: ${preferences.barWeight.toInt()} kg",
+                text = "Unit: ${preferences.unitSystem.label} | Bar: $barDisplay",
                 fontSize = 12.sp,
                 color = TextSecondary
             )
