@@ -100,6 +100,24 @@ object Calculator {
     }
     
     /**
+     * Returns the maximum rep count that will produce a non-zero E1RM result at a given RPE.
+     *
+     * Derived from the x >= 16 failure condition in percentage():
+     *   x = (10 - rpe) + (reps - 1) < 16
+     *   reps < 16 - (10 - rpe) + 1
+     *   maxReps = 15 - floor(10 - rpe)   (conservative: 1 below the exact boundary)
+     *
+     * RPE is clamped to [4, 10] before computing. Returns 0 for rpe <= 0.
+     *
+     *   RPE 10 → 15   RPE 7 → 12   RPE 4 → 9
+     */
+    fun maxReps(rpe: Double): Int {
+        if (rpe <= 0) return 0
+        val clampedRpe = rpe.coerceIn(4.0, 10.0)
+        return (15 - (10.0 - clampedRpe).toInt()).coerceAtLeast(1)
+    }
+
+    /**
      * Helper to round to nearest plate increment.
      * @param weight The weight to round
      * @param increment The plate increment (e.g., 2.5 for lbs, 0.5 for kg)
