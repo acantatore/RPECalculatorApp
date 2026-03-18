@@ -25,13 +25,15 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import com.acantatore.rpecalc.data.AppDatabase
+import com.acantatore.rpecalc.data.SessionRepository
 import com.acantatore.rpecalc.data.UserPreferences
 import com.acantatore.rpecalc.data.UserPreferencesData
 import com.acantatore.rpecalc.ui.MainScreen
 import com.acantatore.rpecalc.ui.SettingsScreen
 import com.acantatore.rpecalc.ui.theme.Palettes
 import com.acantatore.rpecalc.ui.theme.RPECalcTheme
-import com.acantatore.rpecalc.utils.UnitSystem
+import com.acantatore.rpecalc.utils.LiftType
 import com.acantatore.rpecalc.utils.WarmupProtocol
 import kotlinx.coroutines.launch
 
@@ -40,15 +42,18 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         val userPreferences = UserPreferences(this)
+        val sessionRepository = SessionRepository(AppDatabase.getInstance(this))
 
         setContent {
-            var currentPalette by remember { mutableStateOf(Palettes[0]) }
             var showSettings by remember { mutableStateOf(false) }
 
-            // Collect preferences from DataStore
             val preferences by userPreferences.preferencesFlow.collectAsState(
                 initial = UserPreferencesData()
             )
+
+            // Restore palette from DataStore; fall back to Palettes[0] if name not found.
+            val currentPalette = Palettes.find { it.name == preferences.paletteName }
+                ?: Palettes[0]
 
             val coroutineScope = rememberCoroutineScope()
 
@@ -62,27 +67,24 @@ class MainActivity : ComponentActivity() {
                             currentPalette = currentPalette,
                             preferences = preferences,
                             onUnitChange = { unit ->
-                                coroutineScope.launch {
-                                    userPreferences.setUnitSystem(unit)
-                                }
+                                coroutineScope.launch { userPreferences.setUnitSystem(unit) }
                             },
                             onBarWeightChange = { weight ->
-                                coroutineScope.launch {
-                                    userPreferences.setBarWeight(weight)
-                                }
+                                coroutineScope.launch { userPreferences.setBarWeight(weight) }
                             },
                             onProtocolChange = { protocol ->
-                                coroutineScope.launch {
-                                    userPreferences.setWarmupProtocol(protocol)
-                                }
+                                coroutineScope.launch { userPreferences.setWarmupProtocol(protocol) }
                             },
-                            onPaletteChange = { currentPalette = it },
+                            onPaletteChange = { palette ->
+                                coroutineScope.launch { userPreferences.setPaletteName(palette.name) }
+                            },
                             onBack = { showSettings = false }
                         )
                     } else {
                         MainScreen(
                             currentPalette = currentPalette,
                             preferences = preferences,
+                            sessionRepository = sessionRepository,
                             onNavigateToSettings = { showSettings = true }
                         )
                     }
