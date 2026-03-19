@@ -27,7 +27,7 @@ Unit tests are JVM-only (no emulator needed). There are no instrumented tests th
 
 Single-activity Jetpack Compose app. No ViewModel, no Jetpack Navigation.
 
-**Navigation** is a single `showSettings: Boolean` state variable in `MainActivity`. Switching screens means flipping that boolean — `MainScreen` or `SettingsScreen` is rendered accordingly.
+**Navigation** uses a `sealed class Screen { Main, Settings, History }` state variable in `MainActivity`. Switching screens means setting `screen = Screen.X` — the top-level `when(screen)` renders the appropriate composable.
 
 **State management** lives directly in composables via `remember`. The main calculation flow in `MainScreen` uses a single `LaunchedEffect` keyed on all inputs and preferences; any change triggers a full recalculation cascade: E1RM → target weight → warmup sets.
 
@@ -42,14 +42,15 @@ Single-activity Jetpack Compose app. No ViewModel, no Jetpack Navigation.
 
 ### UI Layer (`ui/`)
 
-- **`MainScreen`** — "Have" card (weight/reps/RPE → E1RM) + "Want" card (reps/RPE → target weight) + `WarmupCard` (animated, shown only when target weight is set).
+- **`MainScreen`** — "Have" card (weight/reps/RPE → E1RM) + "Want" card (reps/RPE → target weight) + `WarmupCard` (animated, shown only when target weight is set) + lift selector chip row + Log Session button.
 - **`WarmupCard`** — displays warmup sets with IWF/IPF color-coded plate circles.
-- **`SettingsScreen`** — unit system, bar weight, warmup protocol selection.
+- **`SettingsScreen`** — unit system, bar weight, warmup protocol selection, About section.
+- **`HistoryScreen`** — E1RM trend chart (Vico) + scrollable session list per lift. `ScrollableTabRow` with 5 lift tabs; chart and list share a single `LazyColumn`.
 - **`theme/Color.kt`** — defines `AppPalette` (gradientStart, gradientEnd, accent, name) and the 5 built-in palettes. Also defines global static colors (`CardBackground`, `TextPrimary`, etc.) used directly by composables.
 
 ### Theming
 
-Palette is in-memory state only (not persisted). The active `AppPalette` is passed down as a parameter to all composables that need it. Static colors (backgrounds, text, borders) are package-level constants in `theme/Color.kt`.
+Palette is persisted to DataStore (`paletteName` key) and restored on cold start. The active `AppPalette` is passed down as a parameter to all composables that need it. Static colors (backgrounds, text, borders) are package-level constants in `theme/Color.kt`.
 
 ## gstack
 

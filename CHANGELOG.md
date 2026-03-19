@@ -7,18 +7,14 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [1.2.0] - 2026-03-19
 
 ### Added
-- **E1RM History Screen** — new screen accessible via the chart icon in the AppBar. Shows a Vico line chart of E1RM over time per lift, plus a scrollable list of all logged sessions. Five lift tabs (Squat, Bench, Deadlift, OHP, Other) in a `ScrollableTabRow`. Chart and list share a single `LazyColumn` to avoid nested scroll conflicts.
-- **History navigation** — `sealed class Screen { Main, Settings, History }` replaces the `showSettings: Boolean` boolean nav. Enables clean three-destination navigation without Jetpack Navigation.
-- **Vico chart integration** — `com.patrykandpatrick.vico:compose-m3:1.14.0` added; `E1rmChart` uses `ChartEntryModelProducer` + `FloatEntry` (1.x API) with custom bottom-axis date formatter.
-- **About section** — moved from AppBar overlay to a dedicated section in Settings Screen with an `OutlinedButton` and `AlertDialog`.
-- **History AppBar icon** — replaced the About icon in the AppBar with a History icon (`Icons.Default.History`). AppBar is now: History | Theme | Settings.
-- **`SessionDao.getHistoryByLift`** — parameterized query returning sessions for a given lift in ascending date order; uses `readableDatabase`.
-- **`AppDatabase.readableSessionDao()`** — convenience accessor wrapping `readableDatabase` for history queries.
-- **`SessionRepository.getHistoryByLift`** — suspending function dispatching to `Dispatchers.IO`.
+- **E1RM History Screen** — tap the chart icon in the AppBar to see your E1RM trend over time. Five lift tabs (Squat, Bench, Deadlift, OHP, Other), a line chart that updates with your unit preference, and a full scrollable log of past sessions below.
+- **About section in Settings** — app info and attribution is now in Settings, keeping the AppBar clean. AppBar is now: History | Theme | Settings.
 
-### Changed
-- AppBar icon layout: About icon removed; History icon added as leftmost action.
-- `DESIGN.md` — documented `HistoryScreen` and `SessionRow` component specs; 7 design decision log entries added.
+### For contributors
+- `sealed class Screen { Main, Settings, History }` replaces the `showSettings: Boolean` boolean nav.
+- Vico dependency added: `com.patrykandpatrick.vico:compose-m3:1.14.0`; chart uses `ChartEntryModelProducer` + `FloatEntry` (1.x API).
+- `SessionDao.getHistoryByLift`, `AppDatabase.readableSessionDao()`, `SessionRepository.getHistoryByLift` added for history queries via `readableDatabase`.
+- `DESIGN.md` updated with `HistoryScreen` and `SessionRow` component specs.
 
 ## [1.1.0] - 2026-03-18
 
