@@ -62,4 +62,33 @@ class SessionDao(private val db: SQLiteDatabase) {
         }
         return db.insertOrThrow(TABLE, null, values)
     }
+
+    /** Queries all sessions for a given lift in ascending date order (oldest first). */
+    fun getHistoryByLift(lift: String): List<SessionEntity> {
+        val cursor = db.query(
+            TABLE,
+            arrayOf(COL_ID, COL_DATE, COL_LIFT, COL_WEIGHT, COL_REPS, COL_RPE, COL_E1RM),
+            "$COL_LIFT = ?",
+            arrayOf(lift),
+            null, null,
+            "$COL_DATE ASC"
+        )
+        return cursor.use { c ->
+            buildList {
+                while (c.moveToNext()) {
+                    add(
+                        SessionEntity(
+                            id     = c.getLong(c.getColumnIndexOrThrow(COL_ID)),
+                            date   = c.getLong(c.getColumnIndexOrThrow(COL_DATE)),
+                            lift   = c.getString(c.getColumnIndexOrThrow(COL_LIFT)),
+                            weight = c.getDouble(c.getColumnIndexOrThrow(COL_WEIGHT)),
+                            reps   = c.getInt(c.getColumnIndexOrThrow(COL_REPS)),
+                            rpe    = c.getDouble(c.getColumnIndexOrThrow(COL_RPE)),
+                            e1rm   = c.getDouble(c.getColumnIndexOrThrow(COL_E1RM))
+                        )
+                    )
+                }
+            }
+        }
+    }
 }
