@@ -208,6 +208,32 @@ These are the Calculator's hard limits. The UI **must** surface them — silent 
 - Protocol cards: `radiusMedium`, tapped = `accent` @ 20% alpha background
 - Selected badge: 12sp `accent`, text `"Selected"`, right-aligned
 
+### HistoryScreen
+- AppBar: same chrome as SettingsScreen (`← E1RM History`, accent title)
+- Tab row: `ScrollableTabRow`, `CardBackground` background
+  - Selected tab: `accent` underline indicator, `accent` Bold 14sp text
+  - Unselected tab: `TextSecondary` Regular 14sp text
+  - Labels: `LiftType.displayName` (Squat / Bench / Deadlift / OHP / Other)
+- Chart card: same chrome as `InputCard` (gradient header `gradientEnd→gradientStart`, `radiusMedium`, shadow elevation 20dp)
+  - Header title: `"E1RM Progress"`, 18sp Bold White
+  - Chart height: 200dp fixed
+  - Line color: `palette.gradientStart`, 2dp width
+  - Data point dot: 6dp filled `palette.gradientStart`
+  - Axis labels: `TextSecondary` color, 11sp; Y-axis in user's active unit
+  - Grid lines: `BorderColor` @ 50% alpha
+  - Chart background: `CardBackground`
+  - Accessibility: `semantics { contentDescription = "E1RM chart for $liftName. $n sessions. Latest: $latestFormatted." }`
+- Session list: single `LazyColumn` (chart card is header item; rows are list items below)
+- Empty state (inside chart card): `"No $liftName sessions yet."` 14sp `TextSecondary` centered + `"Log a set from the main screen to start tracking your E1RM."` 12sp `TextSecondary`
+
+### SessionRow
+- Non-interactive in v1 (no `clickable` modifier, no tap ripple)
+- Padding: `horizontal = 16dp, vertical = 12dp`
+- Primary line: date left-aligned (`TextSecondary`, 14sp) + E1RM value right-aligned (22sp Bold, `TextPrimary`) + unit suffix
+- Secondary line: `"$weight × $reps @ RPE $rpe"` left-aligned (`TextSecondary`, 12sp)
+- Divider: `BorderColor` 0.5dp between rows
+- **Rule:** E1RM and weight values must display in user's active unit system (same as `ResultRow` and status bar)
+
 ---
 
 ## Motion
@@ -232,3 +258,9 @@ These are the Calculator's hard limits. The UI **must** surface them — silent 
 | 2026-03-18 | Result rows must have 3 distinct states | Silent blank on invalid input is a trust-eroding UX failure |
 | 2026-03-18 | Reps field max hint: 1–15 | Conservative safe ceiling; actual formula limit is RPE-dependent (fails at x≥16) |
 | 2026-03-18 | Bar weight in status strip: dynamic unit conversion | Hardcoded "kg" is incorrect when user is in LBS mode |
+| 2026-03-19 | HistoryScreen: single LazyColumn (chart as header item) | Two scroll containers create broken UX on mobile |
+| 2026-03-19 | HistoryScreen tab row: ScrollableTabRow | "Deadlift" + 4 siblings overflow a fixed-width TabRow on 360dp devices |
+| 2026-03-19 | Vico chart line color: `palette.gradientStart` | Connects chart to the design system; changes with user's selected palette |
+| 2026-03-19 | HistoryScreen entry: AppBar icon (📊), About moved to Settings | Keeps AppBar at 3 icons; History is always visible, not buried in Settings |
+| 2026-03-19 | SessionRow: non-interactive in v1 | Delete Session is explicitly deferred (TODOS.md P3); no affordance for unimplemented action |
+| 2026-03-19 | Chart accessibility: semantics contentDescription with session count + latest E1RM | Vico line charts are visually complex; screen readers need a text summary |
