@@ -41,7 +41,7 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.History
 import androidx.compose.material.icons.filled.Settings
 import com.acantatore.rpecalc.data.SessionRepository
 import com.acantatore.rpecalc.data.UserPreferencesData
@@ -60,7 +60,8 @@ fun MainScreen(
     currentPalette: AppPalette,
     preferences: UserPreferencesData,
     sessionRepository: SessionRepository,
-    onNavigateToSettings: () -> Unit
+    onNavigateToSettings: () -> Unit,
+    onNavigateToHistory: () -> Unit
 ) {
     var haveWeightInput by remember { mutableStateOf("") }
     var haveRepsInput by remember { mutableStateOf("") }
@@ -77,8 +78,6 @@ fun MainScreen(
     var warmupSets by remember { mutableStateOf<List<WarmupSet>>(emptyList()) }
 
     var selectedLift by remember { mutableStateOf(LiftType.SQUAT) }
-
-    var showAboutDialog by remember { mutableStateOf(false) }
 
     var isLogging by remember { mutableStateOf(false) }
     val snackbarHostState = remember { SnackbarHostState() }
@@ -168,17 +167,17 @@ fun MainScreen(
                 )
 
                 Row {
+                    IconButton(onClick = onNavigateToHistory) {
+                        Icon(
+                            imageVector = Icons.Default.History,
+                            contentDescription = "E1RM History",
+                            tint = currentPalette.accent
+                        )
+                    }
                     IconButton(onClick = onNavigateToSettings) {
                         Icon(
                             imageVector = Icons.Default.Settings,
                             contentDescription = "Settings",
-                            tint = currentPalette.accent
-                        )
-                    }
-                    IconButton(onClick = { showAboutDialog = true }) {
-                        Icon(
-                            imageVector = Icons.Default.Info,
-                            contentDescription = "About",
                             tint = currentPalette.accent
                         )
                     }
@@ -347,28 +346,6 @@ fun MainScreen(
         )
     }
 
-    if (showAboutDialog) {
-        AlertDialog(
-            onDismissRequest = { showAboutDialog = false },
-            title = {
-                Text(text = "About", fontWeight = FontWeight.Bold, color = currentPalette.accent)
-            },
-            text = {
-                Text(
-                    text = "This app is based on the PLSource RPE Calculator by the OpenPowerlifting project.\n\n" +
-                           "Original project: https://gitlab.com/openpowerlifting/plsource\n\n" +
-                           "Licensed under GNU AGPL v3.",
-                    color = TextPrimary
-                )
-            },
-            confirmButton = {
-                TextButton(onClick = { showAboutDialog = false }) {
-                    Text("Close", color = currentPalette.accent)
-                }
-            },
-            containerColor = CardBackground
-        )
-    }
 }
 
 @Composable

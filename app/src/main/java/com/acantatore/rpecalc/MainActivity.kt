@@ -29,13 +29,24 @@ import com.acantatore.rpecalc.data.AppDatabase
 import com.acantatore.rpecalc.data.SessionRepository
 import com.acantatore.rpecalc.data.UserPreferences
 import com.acantatore.rpecalc.data.UserPreferencesData
+import com.acantatore.rpecalc.ui.HistoryScreen
 import com.acantatore.rpecalc.ui.MainScreen
 import com.acantatore.rpecalc.ui.SettingsScreen
 import com.acantatore.rpecalc.ui.theme.Palettes
 import com.acantatore.rpecalc.ui.theme.RPECalcTheme
-import com.acantatore.rpecalc.utils.LiftType
-import com.acantatore.rpecalc.utils.WarmupProtocol
 import kotlinx.coroutines.launch
+
+/**
+ * Top-level navigation destinations.
+ *
+ *   Main ──► Settings ──► Main
+ *        ──► History  ──► Main
+ */
+sealed class Screen {
+    object Main : Screen()
+    object Settings : Screen()
+    object History : Screen()
+}
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -45,13 +56,12 @@ class MainActivity : ComponentActivity() {
         val sessionRepository = SessionRepository(AppDatabase.getInstance(this))
 
         setContent {
-            var showSettings by remember { mutableStateOf(false) }
+            var screen by remember { mutableStateOf<Screen>(Screen.Main) }
 
             val preferences by userPreferences.preferencesFlow.collectAsState(
                 initial = UserPreferencesData()
             )
 
-            // Restore palette from DataStore; fall back to Palettes[0] if name not found.
             val currentPalette = Palettes.find { it.name == preferences.paletteName }
                 ?: Palettes[0]
 
@@ -62,8 +72,8 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    if (showSettings) {
-                        SettingsScreen(
+                    when (screen) {
+                        is Screen.Settings -> SettingsScreen(
                             currentPalette = currentPalette,
                             preferences = preferences,
                             onUnitChange = { unit ->
@@ -78,14 +88,20 @@ class MainActivity : ComponentActivity() {
                             onPaletteChange = { palette ->
                                 coroutineScope.launch { userPreferences.setPaletteName(palette.name) }
                             },
-                            onBack = { showSettings = false }
+                            onBack = { screen = Screen.Main }
                         )
-                    } else {
-                        MainScreen(
+                        is Screen.History -> HistoryScreen(
+                            currentPalette = currentPalette,
+                            sessionRepository = sessionRepository,
+                            preferences = preferences,
+                            onBack = { screen = Screen.Main }
+                        )
+                        else -> MainScreen(
                             currentPalette = currentPalette,
                             preferences = preferences,
                             sessionRepository = sessionRepository,
-                            onNavigateToSettings = { showSettings = true }
+                            onNavigateToSettings = { screen = Screen.Settings },
+                            onNavigateToHistory = { screen = Screen.History }
                         )
                     }
                 }

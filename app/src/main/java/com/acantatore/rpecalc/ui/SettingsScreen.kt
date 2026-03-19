@@ -50,6 +50,8 @@ fun SettingsScreen(
     onPaletteChange: (AppPalette) -> Unit,
     onBack: () -> Unit
 ) {
+    var showAboutDialog by remember { mutableStateOf(false) }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -262,7 +264,43 @@ fun SettingsScreen(
                     }
                 }
             }
+
+            Spacer(modifier = Modifier.height(24.dp))
+
+            // About Section
+            SettingsSection(title = "About", currentPalette = currentPalette) {
+                OutlinedButton(
+                    onClick = { showAboutDialog = true },
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = ButtonDefaults.outlinedButtonColors(contentColor = TextPrimary)
+                ) {
+                    Text("About this app")
+                }
+            }
         }
+    }
+
+    if (showAboutDialog) {
+        AlertDialog(
+            onDismissRequest = { showAboutDialog = false },
+            title = {
+                Text(text = "About", fontWeight = FontWeight.Bold, color = currentPalette.accent)
+            },
+            text = {
+                Text(
+                    text = "This app is based on the PLSource RPE Calculator by the OpenPowerlifting project.\n\n" +
+                           "Original project: https://gitlab.com/openpowerlifting/plsource\n\n" +
+                           "Licensed under GNU AGPL v3.",
+                    color = TextPrimary
+                )
+            },
+            confirmButton = {
+                TextButton(onClick = { showAboutDialog = false }) {
+                    Text("Close", color = currentPalette.accent)
+                }
+            },
+            containerColor = CardBackground
+        )
     }
 }
 
