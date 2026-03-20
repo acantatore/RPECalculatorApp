@@ -48,4 +48,13 @@ class SessionRepository(private val db: AppDatabase) {
             )
         )
     }
+
+    /**
+     * Returns all sessions for a lift in ascending date order.
+     * Runs on [Dispatchers.IO].
+     */
+    suspend fun getHistoryByLift(lift: LiftType): List<SessionEntity> =
+        withContext(Dispatchers.IO) {
+            db.readableSessionDao().getHistoryByLift(lift.name)
+        }
 }

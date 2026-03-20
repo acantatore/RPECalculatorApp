@@ -4,6 +4,18 @@ All notable changes to this project will be documented in this file.
 
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [1.2.0] - 2026-03-19
+
+### Added
+- **E1RM History Screen** — tap the chart icon in the AppBar to see your E1RM trend over time. Five lift tabs (Squat, Bench, Deadlift, OHP, Other), a line chart that updates with your unit preference, and a full scrollable log of past sessions below.
+- **About section in Settings** — app info and attribution is now in Settings, keeping the AppBar clean. AppBar is now: History | Theme | Settings.
+
+### For contributors
+- `sealed class Screen { Main, Settings, History }` replaces the `showSettings: Boolean` boolean nav.
+- Vico dependency added: `com.patrykandpatrick.vico:compose-m3:1.14.0`; chart uses `ChartEntryModelProducer` + `FloatEntry` (1.x API).
+- `SessionDao.getHistoryByLift`, `AppDatabase.readableSessionDao()`, `SessionRepository.getHistoryByLift` added for history queries via `readableDatabase`.
+- `DESIGN.md` updated with `HistoryScreen` and `SessionRow` component specs.
+
 ## [1.1.0] - 2026-03-18
 
 ### Added

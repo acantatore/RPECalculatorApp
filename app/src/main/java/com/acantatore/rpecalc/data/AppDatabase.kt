@@ -38,6 +38,7 @@ class AppDatabase private constructor(context: Context) :
     }
 
     fun sessionDao(): SessionDao = SessionDao(writableDatabase)
+    fun readableSessionDao(): SessionDao = SessionDao(readableDatabase)
 
     companion object {
         private const val DB_NAME    = "rpe_calc_db"

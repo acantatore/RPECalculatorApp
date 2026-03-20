@@ -7,7 +7,10 @@ This application translates the continuous function calculations from the OpenPo
 ## Features
 - **E1RM Calculation ("Have")**: Estimate your 1 Rep Max based on the weight lifted, reps completed, and the RPE of the set.
 - **Target Weight Calculation ("Want")**: Determine the exact weight to load on the bar for a specific target number of reps and RPE, based on your calculated E1RM.
-- **Dynamic Theming**: Swap between 5 elegant custom color palettes on the fly.
+- **Warmup Calculator**: Automatically generates warmup sets with IWF/IPF color-coded plate breakdowns. Three built-in protocols (Standard, Powerlifting, Minimal) plus custom support.
+- **Session Logging**: Tag each set with a lift type (Squat, Bench, Deadlift, OHP, Other) and log it with one tap. All sessions stored locally in SQLite.
+- **E1RM History**: View your E1RM trend over time per lift — line chart + scrollable session list, accessible from the AppBar.
+- **Dynamic Theming**: Swap between 5 elegant custom color palettes on the fly; your selection is remembered across app restarts.
 - **Continuous Logic**: Handles fractional RPEs (e.g. 8.5) and extrapolates beautifully for standard lifting scenarios.
 
 ## Attribution

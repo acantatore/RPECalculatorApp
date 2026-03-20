@@ -2,6 +2,35 @@
 
 ## Deferred Features
 
+### Delete Session Entry
+**Priority:** P3 | **Effort:** S | **Status:** Deferred — build History Screen first
+
+**What:** Long-press on a session row in the History screen → confirm dialog → permanently deletes that entry.
+
+**Why:** Once users can see their history, they'll notice accidental log entries (wrong weight, fat-finger reps). There's currently no way to remove them, which corrupts the E1RM trend.
+
+**Pros:**
+- Closes the "oh no I logged 200kg on bench" escape hatch
+- Small: one `DELETE FROM sessions WHERE id = ?` DAO method + one Compose dialog
+- Natural fit alongside the History Screen
+
+**Cons:**
+- Permanent deletion with no undo — confirmation dialog is non-negotiable
+- Requires row IDs to surface from the data layer to the UI
+
+**Context:** Surfaced during eng review 2026-03-19 while planning the E1RM History Screen. The DAO and Screen will both be in place once History ships, making this a natural follow-on.
+
+**Implementation notes:**
+- Add `SessionDao.delete(id: Long)` using `writableDatabase`
+- Add `SessionRepository.deleteSession(id: Long)` wrapping on `Dispatchers.IO`
+- History row: `Modifier.combinedClickable(onLongClick = { showDeleteDialog = true })`
+- Use `AlertDialog` with "Delete" (destructive) and "Cancel" buttons
+
+**Depends on:** E1RM History Screen must ship first
+**Blocked by:** Nothing once History Screen is implemented
+
+---
+
 ### Copy Warmup to Clipboard
 **Priority:** P3 | **Effort:** S | **Status:** Deferred from v1
 
@@ -30,36 +59,6 @@
 
 ## Future Phases
 
-### E1RM History Screen
-**Priority:** P2 | **Effort:** M | **Status:** Deferred — build Session Log first
-
-**What:** A scrollable screen listing all logged sessions, grouped by lift (Squat, Bench, Deadlift, OHP, Other), showing E1RM over time so the user can track strength progress.
-
-**Why:** Without a history screen, the session log database accumulates data invisibly. Users need to see the payoff of logging — an E1RM trend line that validates their training is working.
-
-**Pros:**
-- Closes the loop on session logging: log → see progress → motivated to keep logging
-- Establishes the data visualization foundation for future program templates (Phase 4)
-- Room DB is already queried by lift in the DAO, so the data layer is ready
-
-**Cons:**
-- Requires a new screen + Jetpack Navigation or equivalent nav state (currently nav is a single boolean)
-- Chart/trend-line library decision deferred (MPAndroidChart, Vico, or custom Canvas)
-- Data is only useful after several sessions are logged — early users won't see a trend
-
-**Context:** Deferred during CEO review (SELECTIVE EXPANSION) on 2026-03-18. The Room DB schema must be designed with this screen in mind: `date: Long` (epoch ms), `lift: String` (enum ordinal or name), `e1rm: Double`. Don't use a generic "value" column — name it `e1rm` now so the history query is legible later.
-
-**Implementation notes:**
-- Query: `SELECT date, e1rm FROM sessions WHERE lift = ? ORDER BY date ASC`
-- Group sessions by lift into tabs or a dropdown selector
-- Minimum viable chart: a simple line chart or table sorted by date with E1RM delta
-- Navigation: add `showHistory: Boolean` nav state alongside `showSettings`
-
-**Depends on:** ~~Session Log feature~~ — shipped in v1.1.0
-**Blocked by:** Nothing
-
----
-
 ### Phase 3: Progress Tracking
 Graphs and trends for E1RM progression (superseded by E1RM History Screen above).
 
@@ -69,6 +68,10 @@ Pre-built training programs with RPE targets.
 ---
 
 ## Completed
+
+### E1RM History Screen
+**Completed:** v1.2.0 (2026-03-19)
+Vico line chart of E1RM over time per lift, scrollable session list, `ScrollableTabRow` with 5 lift tabs, sealed class Screen navigation, `readableDatabase` history query.
 
 ### Session Logging
 **Completed:** v1.1.0 (2026-03-18)
